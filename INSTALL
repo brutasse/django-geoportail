@@ -1,0 +1,11 @@
+Requirements: a working installation of GeoDjango and a spatial database.
+
+Installation:
+
+ * Put the ``geoportal`` subfolder somewhere in your python path
+ * Add ``geoportal`` to your ``INSTALLED_APPS`` (for templates)
+ * Copy or symlink the ``media`` subfolder to <your_project_media>/geoportal
+ * Set ``GEOPORTAL_API_KEY`` in your ``settings.py`` to the API key yo got
+   here: https://api.ign.fr/geoportail/registration.do
+
+See README for a quickstart.
