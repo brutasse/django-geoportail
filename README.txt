@@ -1,8 +1,14 @@
-Django-Geoportail - Geodjango with the maps and photos from the French
-National Geographic Institute.
+=================
+Django-Geoportail
+=================
+
+Geodjango with the maps and photos from the French National Geographic
+Institute.
 
  * Installation: see INSTALL
+
  * Get involved: http://bitbucket.org/bruno/django-geoportail/
+
  * Bugs: http://bitbucket.org/bruno/django-geoportail/issues/
 
 Quickstart
@@ -10,26 +16,27 @@ Quickstart
 
 Add some maps to your django sites...
 
-
 Known Issues
 ------------
 
 The maps are not displayed properly for Multi* fields:
 
  * MultiPointField
+
  * MultiLineStringField
+
  * MultiPolygonField
+
  * (untested) GeometryCollectionField
 
 In those cases, the objects will be displayed on the map but the map won't be
 automatically focused to the objects when you try to edit existing objects.
 You'll have to find them manually. Editing works.
 
-
 In the admin
 ------------
 
-To register a geographic model, add those lines to your <app_dir>/admin.py:
+To register a geographic model, add those lines to your <app_dir>/admin.py::
 
     from geoportal.admin import GeoPortalAdmin
     from django.contrib.gis import admin
@@ -38,7 +45,7 @@ To register a geographic model, add those lines to your <app_dir>/admin.py:
     admin.site.register(MyModel, GeoPortalAdmin)
 
 If you need some customization, you can easily override the GeoPortalAdmin
-class:
+class::
 
     class MyGeoAdmin(GeoPortalAdmin):
         # Your options here
@@ -95,7 +102,6 @@ Available options are:
 
      For more information about the different layers, please visit:
      https://api.ign.fr/geoportail/api/doc/fr/webmaster/layers.html
-
 
 In your templates
 -----------------
