@@ -4,11 +4,11 @@ from distutils.core import setup
 setup(
     name='django-geoportail',
     version='0.1.0',
-    author='Bruno Renié',
+    author=u'Bruno Renié',
     author_email='bruno@renie.fr',
     packages=['geoportal',],
     url='http://bitbucket.org/bruno/django-geoportail',
-    licence='LICENCE.txt',
+    license='LICENCE.txt',
     description='Add maps and photos from the French National Geographic Institute to GeoDjango',
     long_description=open('README.txt').read(),
     classifiers=[
