@@ -2,6 +2,8 @@
 Author: Justin Bronn, Travis Pinney & Dane Springmeyer.
 Hacked by Bruno Renié to make it work with the Géoportail API.
 {% endcomment %}
+// The MapBox theme is nice
+//OpenLayers.ImgPath = "http://js.mapbox.com/theme/dark/";
 {% block vars %}var {{ module }} = {};
 {{ module }}.map = null; {{ module }}.controls = null; {{ module }}.panel = null; {{ module }}.re = new RegExp("^SRID=\d+;(.+)", "i"); {{ module }}.layers = {}; 
 {{ module }}.wkt_f = new OpenLayers.Format.WKT();
@@ -118,12 +120,10 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     viewer_{{ id }} = new Geoportal.Viewer.Default("{{ id }}_map", options);
     viewer_{{ id }}.setToolsPanelVisibility(false);
     {% if not map_info %}viewer_{{ id }}.setInformationPanelVisibility(false);{% endif %}
-    {% ifequal layers 'auto' %}
     // Add all the available layers
-    viewer_{{ id }}.addGeoportalLayers();
-    {% else %}{% for layer in layers %}
-    viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}});
-    {% endfor %}{% endifequal %}{{ module }}.map = viewer_{{ id }}.map;
+    {% for layer in layers %}
+    viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}'});
+    {% endfor %}{{ module }}.map = viewer_{{ id }}.map;
     {% if is_linestring %}OpenLayers.Feature.Vector.style["default"]["strokeWidth"] = 3; // Default too thin for linestrings. {% endif %}
     {{ module }}.layers.vector = new OpenLayers.Layer.Vector(" {{ field_name }}");
     {{ module }}.map.addLayer({{ module }}.layers.vector);

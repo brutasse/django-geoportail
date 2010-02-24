@@ -15,6 +15,10 @@
      background-image: url("{{ ADMIN_MEDIA_PREFIX }}img/gis/move_vertex_off.png");
      background-repeat: no-repeat;
   }
+	{% if not map_info %}
+	#{{ id }}_map_Info { display: None; }
+	{% endif %}
+	div[id="Geoportal.Control.LayerSwitcher_49"] { display: none; }
 </style>
 <!--[if IE]>
 <style type="text/css">

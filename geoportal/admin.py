@@ -1,4 +1,4 @@
-from django.contrib.gis import admin
+from django.contrib.gis.admin import site, GeoModelAdmin
 from django.conf import settings
 
 
@@ -8,7 +8,7 @@ if not hasattr(settings, 'GEOPORTAL_API_KEY'):
     warnings.warn("GEOPORTAL_API_KEY could not be found in your settings. It is necessary to get maps to work.")
 
 
-class GeoPortalAdmin(admin.GeoModelAdmin):
+class GeoPortalAdmin(GeoModelAdmin):
     """A base model for displaying a GeoPortal admin map"""
     ##############
     # Public API #
@@ -26,17 +26,19 @@ class GeoPortalAdmin(admin.GeoModelAdmin):
     default_lon = 2  # Default location
     default_lat = 47 # is France
 
-    # Show map info or not (broken atm)
+    # Show map info or not
     map_info = True
 
     # Layers
-    layers = 'auto' # Show the default set of layers provided by GeoPortal
-    #layers = (
+    layers = (
         # ('code', opacity),
         # Order matters, layers are added in this order.
         #('photos', 1),
-        #('maps', 1),
-    #)
+        ('maps', 1),
+    )
+
+    # Display the layer switcher
+    layerswitcher = True
 
     ###############
     # Private API #
@@ -44,9 +46,6 @@ class GeoPortalAdmin(admin.GeoModelAdmin):
     map_template = 'gis/admin/geoportal.html'
     wms_url = 'http://wxs.ign.fr/geoportail/wmsc'
     openlayers_url = 'geoportal/GeoportalExtended.js'
-
-    # Display the layer switcher
-    layerswitcher = False
 
     # Mouse position: already displayed by Geoportail
     mouse_position = False
@@ -81,6 +80,7 @@ class GeoPortalAdmin(admin.GeoModelAdmin):
         lyrs = []
         for (key, value) in self.layers:
             lyrs.append({
+                'switcher_name': key.capitalize(),
                 'name': self._layers[key],
                 'resource_name': self._layers[key].split(':')[0],
                 'opacity': value,

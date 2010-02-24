@@ -38,16 +38,15 @@ In the admin
 
 To register a geographic model, add those lines to your <app_dir>/admin.py::
 
-    from geoportal.admin import GeoPortalAdmin
-    from django.contrib.gis import admin
+    from geoportal import admin
     from my_app.models import MyModel
 
-    admin.site.register(MyModel, GeoPortalAdmin)
+    admin.site.register(MyModel, admin.GeoPortalAdmin)
 
 If you need some customization, you can easily override the GeoPortalAdmin
 class::
 
-    class MyGeoAdmin(GeoPortalAdmin):
+    class MyGeoAdmin(admin.GeoPortalAdmin):
         # Your options here
 
 Available options are:
@@ -67,41 +66,40 @@ Available options are:
 * ``point_zoom``: the zoom level to select when you see a single point.
   Default: 15, for a 1:25000 map (best resolution available)
 
-* ``map_info`` (broken atm): show Geoportal's scale and coordinates widget.
-  Default: True
+* ``map_info``: show Geoportal's scale and coordinates widget. Default: True
 
-* ``layers``: customize the layers. Default: 'auto'. Could be either:
+* ``layers``: A 2-tuple tuple to customize the layers. Default:
+  ( ('maps', 1), ). The format is ``( ('code', opacity), (..., ...), )``.
+  ``code`` is the codename of the layer you want to display, ``opacity`` is
+  its opacity, between 0 and 1.
 
-  * 'auto': automatically fill the map with a combination of the available
-    layers (maps, photos...).
-  * A 2-tuple tuple: ``( ('code', opacity), (..., ...), )``. ``code`` is the
-    codename of the layer you want to display, ``opacity`` is its opacity,
-    between 0 and 1.
+  The order is important, the layers are added to the map in the same order
+  as they are defined. If you add a layer with an opacity set to 1 to some
+  previously added layers, this will hide the previous layers.
 
-    The order is important, the layers are added to the map in the same order
-    as they are defined. If you add a layer with an opacity set to 1 to some
-    previously added layers, this will hide the previous layers.
+  Available layers are:
 
-    Available layers are:
+  * 'photos'
+  * 'maps'
+  * 'terrain': elevation map
+  * 'cadaster': cadastral parcels
+  * 'hydrography'
+  * 'roads'
+  * 'railways'
+  * 'runways'
+  * 'buildings'
+  * 'gov': utility and governmental services
+  * 'boundaries': adminstrative boundaries
+  * 'coast': sea regions
 
-    * 'photos'
-    * 'maps'
-    * 'terrain': elevation map
-    * 'cadaster': cadastral parcels
-    * 'hydrography'
-    * 'roads'
-    * 'railways'
-    * 'runways'
-    * 'buildings'
-    * 'gov': utility and governmental services
-    * 'boundaries': adminstrative boundaries
-    * 'coast': sea regions
+  Note that layers may or may not be available depending on your API key.
+  The free contract gives you only 'photos' and 'maps'.
 
-    Note that layers may or may not be available depending on your API key.
-    The free contract gives you only 'photos' and 'maps'.
+  For more information about the different layers, please visit:
+  https://api.ign.fr/geoportail/api/doc/fr/webmaster/layers.html
 
-    For more information about the different layers, please visit:
-    https://api.ign.fr/geoportail/api/doc/fr/webmaster/layers.html
+* ``layerswitcher``: Display the menu to toggle each layer's visibility.
+  Default: True.
 
 In your templates
 -----------------
