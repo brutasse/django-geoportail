@@ -1,1 +1,2 @@
+v0.2.0, Tue Mar  2 2010 -- Added a template tag for rendering geo* fields.
 v0.1.0, Fri Jan  8 2010 -- First release, admin support only.

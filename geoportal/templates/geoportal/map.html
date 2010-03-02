@@ -1,0 +1,114 @@
+<script text="text/javascript">
+	// Loading the Geoportal lib once -- if it's here don't bother retrieving it again
+	if (typeof(Geoportal) == 'function' && typeof(Geoportal.prototype) == 'object') { } else {
+		var head= document.getElementsByTagName('head')[0];
+		var script= document.createElement('script');
+		script.type= 'text/javascript';
+		script.src= '{{ MEDIA_URL }}geoportal/GeoportalExtended.js';
+		head.appendChild(script);
+	}
+</script>
+
+<div id="{{ map_var }}_map" style="width: {{ options.width }}px; height: {{ options.height }}px;"></div>
+
+<style type="text/css">
+	.gpMainMap { border: none; }
+</style>
+
+<script type="text/javascript">
+	var {{ map_var }}_utils = {};
+	{{ map_var }}_utils.map = null;
+	{{ map_var }}_utils.controls = null;
+	{{ map_var }}_utils.panel = null;
+	{{ map_var }}_utils.re = new RegExp("^SRID=\d+;(.+)", "i");
+	{{ map_var }}_utils.layers = {}; 
+	{{ map_var }}_utils.wkt_f = new OpenLayers.Format.WKT();
+	{{ map_var }}_utils.is_collection = {{ is_collection|yesno:"true,false" }};
+	{{ map_var }}_utils.collection_type = '{{ collection_type }}';
+	{{ map_var }}_utils.is_linestring = {{ is_linestring|yesno:"true,false" }};
+	{{ map_var }}_utils.is_polygon = {{ is_polygon|yesno:"true,false" }};
+	{{ map_var }}_utils.is_point = {{ is_point|yesno:"true,false" }};
+
+	{{ map_var }}_utils.get_ewkt = function(feat){return 'SRID={{ srid }};' + {{ map_var }}_utils.wkt_f.write(feat);}
+
+	{{ map_var }}_utils.read_wkt = function(wkt){
+		var match = {{ map_var }}_utils.re.exec(wkt);
+		if (match){wkt = match[1];}
+		return {{ map_var }}_utils.wkt_f.read(wkt);
+	}
+
+	{{ map_var }}_utils.write_wkt = function(feat){
+		if ({{ map_var }}_utils.is_collection){ {{ map_var }}_utils.num_geom = feat.geometry.components.length;}
+		else { {{ map_var }}_utils.num_geom = 1;}
+	}
+
+	function geoportalLoad{{ map_var }}(div_id, mode, territory, crs, dispcrs, proxy){
+		var options = new Object();
+		if (mode) options.mode = mode;
+		if (territory) options.territory = territory;
+		if (crs) options.projection = crs;
+		if (dispcrs) options.displayProjection = dispcrs;
+		if (proxy) options.proxy = proxy;
+		options.nameInstance = '{{ map_var }}';
+		options.apiKey = '{{ api_key }}';
+		options[options.apiKey] = {
+			tokenServer:{url:'http://jeton-api.ign.fr',ttl:600},
+			tokenTimeOut:600,
+			bounds: [-180.0,-90.0,180.0,90.0],
+			allowedGeoportalLayers:[],
+			resources:{}
+		};
+		{% for layer in layers %}
+		options[options.apiKey].allowedGeoportalLayers.push('{{ layer.name }}');
+		options[options.apiKey].resources['{{ layer.name }}'] = {name:'{{ layer.resource_name }}',type:'WMSC',url:'{{ wms_url }}'};
+		{% endfor %}
+		{{ map_var }} = new Geoportal.Viewer.Default(div_id, options);
+		return {{ map_var }};
+	}
+
+	{{ map_var }} = null;
+	function initGeoportalMap_{{ map_var }}(callback) {
+		geoportalLoad{{ map_var }}("{{ map_var }}_map", "mini");
+		{% for layer in layers %}
+		{{ map_var }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1});
+		{% endfor %}
+		var styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
+				fillColor: "#{{ options.color }}",
+				fillOpacity: {{ options.opacity }},
+				{% if is_linestring %}strokeWidth: 3,{% endif %}
+				strokeColor: '#{{ options.color }}'},
+			OpenLayers.Feature.Vector.style["default"]))
+		{{ map_var }}_utils.layers.vector = new OpenLayers.Layer.Vector("{{ field_name }}", {styleMap: styleMap});
+
+		{% if options.visible %}
+		{{ map_var }}.map.addLayer({{ map_var }}_utils.layers.vector);
+		{% endif %}
+
+		var wkt = '{{ wkt }}';
+		var geom = {{ map_var }}_utils.read_wkt(wkt);
+		geom = new OpenLayers.Feature.Vector(geom.geometry.transform(new OpenLayers.Projection('EPSG:{{ srid }}'), {{ map_var }}.map.getProjection()));
+		{{ map_var }}_utils.write_wkt(geom);
+		if ({{ map_var }}_utils.is_collection){
+			for (var i = 0; i < {{ map_var }}_utils.num_geom; i++){
+				{{ map_var }}_utils.layers.vector.addFeatures([new OpenLayers.Feature.Vector(geom.geometry.components[i].clone())]);
+			}
+		} else {
+			{{ map_var }}_utils.layers.vector.addFeatures([geom]);
+		}
+		{{ map_var }}.map.zoomToExtent(geom.geometry.getBounds());
+		{{ map_var }}.map.zoomToExtent(geom.geometry.getBounds());
+		if ({{ map_var }}_utils.is_point){
+			{{ map_var }}.map.zoomTo({{ point_zoom }});
+		}
+		{% if options.zoom %}
+		{{ map_var }}.map.zoomTo({{ options.zoom }});{% endif %}
+		if (typeof(callback) == 'function') {
+			callback();
+		}
+	};
+	if (typeof(initGeoportalMap) == 'function') {
+		initGeoportalMap = initGeoportalMap(initGeoportalMap_{{ map_var }});
+	} else {
+		initGeoportalMap = initGeoportalMap_{{ map_var }};
+	}
+</script>

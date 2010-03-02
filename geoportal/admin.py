@@ -1,6 +1,7 @@
 from django.contrib.gis.admin import site, GeoModelAdmin
 from django.conf import settings
 
+from geoportal import utils
 
 if not hasattr(settings, 'GEOPORTAL_API_KEY'):
     # Just raising a warning, it's not fatal after all
@@ -19,7 +20,7 @@ class GeoPortalAdmin(GeoModelAdmin):
 
     max_zoom = 20    # Zoom levels: 20 = finest
     min_zoom = 0     #               0 = world
-    point_zoom = 15  # Default zoom level for a single point
+    point_zoom = utils.POINT_ZOOM  # Default zoom level for a single point
 
     default_zoom = 5 # display a whole country
 
@@ -44,7 +45,7 @@ class GeoPortalAdmin(GeoModelAdmin):
     # Private API #
     ###############
     map_template = 'gis/admin/geoportal.html'
-    wms_url = 'http://wxs.ign.fr/geoportail/wmsc'
+    wms_url = utils.WMS_URL
     openlayers_url = 'geoportal/GeoportalExtended.js'
 
     # Mouse position: already displayed by Geoportail
@@ -52,44 +53,9 @@ class GeoPortalAdmin(GeoModelAdmin):
     # Same for scale
     scale_text = False
 
-
-    _layers = {
-        # See https://api.ign.fr/geoportail/api/doc/fr/webmaster/layers.html
-        # for an explanation of the meaning of each layer.
-
-        # The layers can or cannot be accessed depending on your API contract.
-        'photos': 'ORTHOIMAGERY.ORTHOPHOTOS:WMSC',
-        'maps': 'GEOGRAPHICALGRIDSYSTEMS.MAPS:WMSC',
-        'terrain': 'ELEVATION.SLOPS',
-        'cadaster': 'CADASTRALPARCELS.PARCELS',
-        'hydrography': 'HYDROGRAPHY.HYDROGRAPHY',
-        'roads': 'TRANSPORTNETWORKS.ROADS',
-        'railways': 'TRANSPORTNETWORKS.RAILWAYS',
-        'runways': 'TRANSPORTNETWORKS.RUNWAYS',
-        'buildings': 'BUILDINGS.BUILDINGS',
-        'gov': 'UTILITYANDGOVERNMENTALSERVICES.ALL',
-        'boundaries': 'ADMINISTRATIVEUNITS.BOUNDARIES',
-        'coast': 'SEAREGIONS.LEVEL0',
-    }
-
-    def get_layers(self):
-        if self.layers == 'auto':
-            # forcing layerswitcher display
-            self.layerswitcher = True
-            return self.layers
-        lyrs = []
-        for (key, value) in self.layers:
-            lyrs.append({
-                'switcher_name': key.capitalize(),
-                'name': self._layers[key],
-                'resource_name': self._layers[key].split(':')[0],
-                'opacity': value,
-            })
-        return lyrs
-
     def get_map_widget(self, db_field):
         widget = super(GeoPortalAdmin, self).get_map_widget(db_field)
         widget.params['map_info'] = self.map_info
-        widget.params['layers'] = self.get_layers()
+        widget.params['layers'] = utils.get_layers(self.layers)
         widget.params['api_key'] = settings.GEOPORTAL_API_KEY
         return widget

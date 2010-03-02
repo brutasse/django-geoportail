@@ -17,12 +17,16 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
   // EWKT is only exposed to OL if there's a validation error in the admin.
   var match = {{ module }}.re.exec(wkt);
   if (match){wkt = match[1];}
-  return {{ module }}.wkt_f.read(wkt);
+  var wkt = {{ module }}.wkt_f.read(wkt);
+  wkt = new OpenLayers.Feature.Vector(wkt.geometry.transform(new OpenLayers.Projection('EPSG:4326'), {{ module }}.map.getProjection()));
+  return wkt;
 }
 {{ module }}.write_wkt = function(feat){
   if ({{ module }}.is_collection){ {{ module }}.num_geom = feat.geometry.components.length;}
   else { {{ module }}.num_geom = 1;}
-  document.getElementById('{{ id }}').value = {{ module }}.get_ewkt(feat);
+  var feat2 = feat.clone();
+  var feat_epsg = new OpenLayers.Feature.Vector(feat2.geometry.transform({{ module }}.map.getProjection(), new OpenLayers.Projection('EPSG:4326')));
+  document.getElementById('{{ id }}').value = {{ module }}.get_ewkt(feat_epsg);
 }
 {{ module }}.add_wkt = function(event){
   // This function will sync the contents of the `vector` layer with the
@@ -69,7 +73,9 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
 {{ module }}.clearFeatures = function (){
   {{ module }}.deleteFeatures();
   document.getElementById('{{ id }}').value = '';
-  {{ module }}.map.setCenter(new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }}), {{ default_zoom }});
+  var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
+  center = center.transform(new OpenLayers.Projection('EPSG:4326'), {{ module }}.map.getProjection());
+  {{ module }}.map.setCenter(center, {{ default_zoom }});
 }
 // Add Select control
 {{ module }}.addSelectControl = function(){   
@@ -103,7 +109,6 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
 {{ module }}.init = function(){
     var options = new Object();
     options.apiKey = '{{ api_key }}';
-    options.projection = 'EPSG:4326';
     options[options.apiKey] = {
       tokenServer:{url:'http://jeton-api.ign.fr',ttl:600},
       tokenTimeOut:600,
@@ -148,7 +153,9 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
           {{ module }}.map.zoomTo({{ point_zoom }}); 
       }
     } else {
-      {{ module }}.map.setCenter(new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }}), {{ default_zoom }});
+      var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
+      center = center.transform(new OpenLayers.Projection('EPSG:4326'), {{ module }}.map.getProjection());
+      {{ module }}.map.setCenter(center, {{ default_zoom }});
     }
     // This allows editing of the geographic fields -- the modified WKT is
     // written back to the content field (as EWKT, so that the ORM will know
