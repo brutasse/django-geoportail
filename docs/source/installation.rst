@@ -80,8 +80,28 @@ installation in a python shell::
     >>> geoportal.get_version()
     '0.2.1'
 
-If it works as expected, you are almost ready to use *django-geoportail*.
-Almost.
+And of course, add ``geoportal`` to your django project's ``INSTALLED_APPS``.
+In ``settings.py``:
+
+.. code-block:: python
+
+    INSTALLED_APPS = (
+        '...',
+        # whatever you already have
+        '...',
+        'geoportal',
+    )
+
+Once you've done it, try to run your tests for the whole project or just
+*django-geoportal*:
+
+.. code-block:: bash
+
+    ./manage.py test # for the whole project
+    ./manage.py test geoportal # only django-geoportail's tests
+
+If it works as expected (i.e. the tests pass), you are almost ready to use
+*django-geoportail*. Almost.
 
 Media files
 -----------
