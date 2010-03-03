@@ -1,3 +1,5 @@
 include *.txt
 recursive-include geoportal *
 recursive-include media *
+include docs/Makefile
+recursive-include docs/source *

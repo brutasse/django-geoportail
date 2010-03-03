@@ -3,6 +3,7 @@
     * Fix in the javascript: allowing more than 2 maps per page
     * More robust argument parsing, allowing template variables
     * Added version number at the root of the package
+    * Docs -- online at http://packages.python.org/django-geoportail/
 
 
 2010-03-02 Bruno Renié <bruno@renie.fr> -- 0.2.0

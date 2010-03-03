@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name='django-geoportail',
-    version='0.2.0',
+    version='0.2.1',
     author=u'Bruno Renie',
     author_email='bruno@renie.fr',
     packages=['geoportal',],
