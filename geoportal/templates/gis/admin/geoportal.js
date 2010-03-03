@@ -128,6 +128,9 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1});
     {% endfor %}{{ module }}.map = viewer_{{ id }}.map;
     {% if is_linestring %}OpenLayers.Feature.Vector.style["default"]["strokeWidth"] = 3; // Default too thin for linestrings. {% endif %}
+    OpenLayers.Feature.Vector.style["default"]["fillOpacity"] = {{ feature_opacity }};
+    OpenLayers.Feature.Vector.style["default"]["strokeColor"] = "#{{ feature_color }}";
+    OpenLayers.Feature.Vector.style["default"]["fillColor"] = "#{{ feature_color }}";
     {{ module }}.layers.vector = new OpenLayers.Layer.Vector(" {{ field_name }}");
     {{ module }}.map.addLayer({{ module }}.layers.vector);
     // Read WKT from the text field.

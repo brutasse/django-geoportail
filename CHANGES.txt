@@ -1,2 +1,17 @@
-v0.2.0, Tue Mar  2 2010 -- Added a template tag for rendering geo* fields.
-v0.1.0, Fri Jan  8 2010 -- First release, admin support only.
+2010-03-02 Bruno Renié <bruno@renie.fr> -- 0.2.1
+
+    * Fix in the javascript: allowing more than 2 maps per page
+    * More robust argument parsing, allowing template variables
+    * Added version number at the root of the package
+
+
+2010-03-02 Bruno Renié <bruno@renie.fr> -- 0.2.0
+
+    * Added a template tag for rendering geo* fields
+    * No more request to api.ign.fr, going straight to the token server
+
+
+2010-01-08 Bruno Renié <bruno@renie.fr> -- 0.1.0
+
+    * First release, admin support only
+

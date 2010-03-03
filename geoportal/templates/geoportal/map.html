@@ -67,7 +67,8 @@
 	}
 
 	{{ map_var }} = null;
-	function initGeoportalMap_{{ map_var }}(callback) {
+	function initGeoportalMap_{{ map_var }}(){
+		if ({{ map_var }} != null) { return; }
 		geoportalLoad{{ map_var }}("{{ map_var }}_map", "mini");
 		{% for layer in layers %}
 		{{ map_var }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1});
@@ -102,13 +103,10 @@
 		}
 		{% if options.zoom %}
 		{{ map_var }}.map.zoomTo({{ options.zoom }});{% endif %}
-		if (typeof(callback) == 'function') {
-			callback();
-		}
+
+		{% if not options.navigation %}
+		{{ map_var }}.map.getControlsByClass('OpenLayers.Control.Navigation')[0].deactivate();
+		{{ map_var }}.map.getControlsByClass('OpenLayers.Control.KeyboardDefaults')[0].deactivate();{% endif %}
 	};
-	if (typeof(initGeoportalMap) == 'function') {
-		initGeoportalMap = initGeoportalMap(initGeoportalMap_{{ map_var }});
-	} else {
-		initGeoportalMap = initGeoportalMap_{{ map_var }};
-	}
+	initGeoportalMap_{{ map_var }}();
 </script>

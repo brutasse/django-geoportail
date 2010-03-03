@@ -11,6 +11,14 @@ import random
 register = template.Library()
 
 
+class SafeVariable(template.Variable):
+    def resolve(self, context):
+        try:
+            return super(SafeVariable, self).resolve(context)
+        except template.VariableDoesNotExist:
+            return self.var
+
+
 class MapNode(template.Node):
     def __init__(self, args):
         self.geo_field = template.Variable(args[1])
@@ -21,12 +29,12 @@ class MapNode(template.Node):
             for o in options:
                 key, value = o.split('=')
                 available = ('width', 'height', 'visible', 'color',
-                             'opacity', 'zoom')
+                             'opacity', 'zoom', 'navigation')
                 if not key in available:
                     raise template.TemplateSyntaxError('"%s" option is not su'
                             'pported. Available options are: %s' % (key,
                             ', '.join(available)))
-                self.options[key] = value
+                self.options[key] = SafeVariable(value)
 
     def render(self, context):
         # Generate a probably unique name for javascript variables -- in case
@@ -44,6 +52,10 @@ class MapNode(template.Node):
         else:
             collection_type = 'None'
 
+        # Resolving the options
+        for (key, value) in self.options.items():
+            self.options[key] = value.resolve(context)
+
         # Default options
         if not 'width' in self.options:
             self.options['width'] = utils.DEFAULT_WIDTH
@@ -57,10 +69,7 @@ class MapNode(template.Node):
         if not 'opacity' in self.options:
             self.options['opacity'] = utils.DEFAULT_OPACITY
 
-        if not 'visible' in self.options:
-            self.options['visible'] = True
-        elif self.options['visible'].lower() in ('false', '0', 'f'):
-            self.options['visible'] = False
+        self.check_booleans()
 
         # Completely isolated context
         isolated_context = template.Context({
@@ -86,6 +95,22 @@ class MapNode(template.Node):
         loaded = template.loader.get_template('geoportal/map.html')
         return loaded.render(isolated_context)
 
+    def to_boolean(self, var_name):
+        try:
+            self.options[var_name] = bool(int(self.options[var_name]))
+        except ValueError:
+            raise template.TemplateSyntaxError('"%s" can be either 0 or 1 (was'
+                ': "%s")' % (var_name, self.options[var_name]))
+
+    def check_booleans(self):
+        if not 'visible' in self.options:
+            self.options['visible'] = 1
+        else:
+            self.to_boolean('visible')
+
+        if 'navigation' in self.options:
+            self.to_boolean('navigation')
+
 
 @register.tag
 def geoportal_map(parser, token):
@@ -101,6 +126,7 @@ def geoportal_map(parser, token):
      * color (rrggbb)    ee9900 (OpenLayers.Feature.Vector.style["default"]["fillColor"])
      * opacity (0 -> 1)  0.4
      * zoom (~3 -> 14)   if not provided, calculated automatically
+     * navigation (1|0)  turn navigation on
     """
     bits = token.split_contents()
     if len(bits) < 2:

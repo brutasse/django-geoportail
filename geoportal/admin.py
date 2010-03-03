@@ -15,8 +15,8 @@ class GeoPortalAdmin(GeoModelAdmin):
     # Public API #
     ##############
 
-    map_width = 600  # Dimensions of the
-    map_height = 400 # map (pixels)
+    map_width = utils.DEFAULT_WIDTH  # Dimensions of the
+    map_height = utils.DEFAULT_HEIGHT # map (pixels)
 
     max_zoom = 20    # Zoom levels: 20 = finest
     min_zoom = 0     #               0 = world
@@ -58,4 +58,6 @@ class GeoPortalAdmin(GeoModelAdmin):
         widget.params['map_info'] = self.map_info
         widget.params['layers'] = utils.get_layers(self.layers)
         widget.params['api_key'] = settings.GEOPORTAL_API_KEY
+        widget.params['feature_color'] = utils.DEFAULT_COLOR
+        widget.params['feature_opacity'] = utils.DEFAULT_OPACITY
         return widget
