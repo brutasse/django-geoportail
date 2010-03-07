@@ -1,3 +1,5 @@
+from geoportal import utils, admin, templatetags
+
 VERSION = (0, 2, 1)
 
 def get_version():
@@ -5,3 +7,5 @@ def get_version():
     if VERSION[2]:
         version = '%s.%s' % (version, VERSION[2])
     return version
+
+__all__ = ['utils', 'admin', 'templatetags']
