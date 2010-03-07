@@ -3,7 +3,7 @@ Author: Justin Bronn, Travis Pinney & Dane Springmeyer.
 Hacked by Bruno Renié to make it work with the Géoportail API.
 {% endcomment %}
 {% block vars %}var {{ module }} = {};
-{{ module }}.map = null; {{ module }}.controls = null; {{ module }}.panel = null; {{ module }}.re = new RegExp("^SRID=\d+;(.+)", "i"); {{ module }}.layers = {}; 
+{{ module }}.map = null; {{ module }}.controls = null; {{ module }}.panel = null; {{ module }}.re = new RegExp("^SRID=\d+;(.+)", "i"); {{ module }}.layers = {};
 {{ module }}.wkt_f = new OpenLayers.Format.WKT();
 {{ module }}.is_collection = {{ is_collection|yesno:"true,false" }};
 {{ module }}.collection_type = '{{ collection_type }}';
@@ -53,7 +53,7 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
       {{ module }}.add_wkt(event); 
       return;
     } else {
-      // When modifying the selected components are added to the 
+      // When modifying the selected components are added to the
       // vector layer so we only increment to the `num_geom` value.
       var feat = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.{{ geom_type }}());
       for (var i = 0; i < {{ module }}.num_geom; i++){
@@ -162,7 +162,7 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     }
     // This allows editing of the geographic fields -- the modified WKT is
     // written back to the content field (as EWKT, so that the ORM will know
-    // to transform back to original SRID). 
+    // to transform back to original SRID).
     {{ module }}.layers.vector.events.on({"featuremodified" : {{ module }}.modify_wkt});
     {{ module }}.layers.vector.events.on({"featureadded" : {{ module }}.add_wkt});
     {% block controls %}
