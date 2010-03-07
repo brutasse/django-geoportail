@@ -42,7 +42,7 @@
 		else { {{ map_var }}.num_geom = 1;}
 	}
 
-	function geoportalLoad{{ map_var }}(div_id, mode, territory, crs, dispcrs, proxy){
+	{{ map_var }}.load = function(div_id, mode, territory, crs, dispcrs, proxy){
 		var options = new Object();
 		if (mode) options.mode = mode;
 		if (territory) options.territory = territory;
@@ -63,13 +63,11 @@
 		options[options.apiKey].resources['{{ layer.name }}'] = {name:'{{ layer.resource_name }}',type:'WMSC',url:'{{ wms_url }}'};
 		{% endfor %}
 		{{ map_var }}.viewer = new Geoportal.Viewer.Default(div_id, options);
-		//return {{ map_var }}.viewer;
 	}
 
-	//{{ map_var }}.map = null;
-	function initGeoportalMap_{{ map_var }}(){
+	{{ map_var }}.init = function(){
 		if ({{ map_var }}.viewer != null) { return; }
-		geoportalLoad{{ map_var }}("{{ map_var }}_map", "mini");
+		{{ map_var }}.load("{{ map_var }}_map", "mini");
 		{% for layer in layers %}
 		{{ map_var }}.viewer.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1});
 		{% endfor %}
@@ -108,5 +106,5 @@
 		{{ map_var }}.viewer.map.getControlsByClass('OpenLayers.Control.Navigation')[0].deactivate();
 		{{ map_var }}.viewer.map.getControlsByClass('OpenLayers.Control.KeyboardDefaults')[0].deactivate();{% endif %}
 	};
-	initGeoportalMap_{{ map_var }}();
+	{{ map_var }}.init();
 </script>
