@@ -27,6 +27,15 @@ There are two ways to enable this library:
 The {% geoportal_map %} template tag
 ------------------------------------
 
+Syntax:
+
+.. code-block:: jinja
+
+    {% geoportal_map field option1=value, option2=other_value [as var_name] %}
+
+Basic usage
+```````````
+
 ``geoportal_tags`` provides a single template tag: the ``{% geoportal_map %}``
 tag. It takes a required argument and several options.
 
@@ -50,11 +59,51 @@ section, the map would look like this:
 This is a map with the standard dimensions (600x400 pixels), the default
 feature color (``#ee9900``) and the default feature opacity (``0.4``).
 
+Getting the javascript context
+``````````````````````````````
+
+When a map is rendered on a template, a random javascript variable is
+generated and this variable stores the map's information. If you need to do
+some further customization, you can get this variable in your template
+context:
+
+.. code-block:: jinja
+
+    {% geoportal_map geo_field as var_name %}
+
+This will still render the map and you will be able to manipulate it with some
+javascript code:
+
+.. code-block:: html
+
+    <script type="text/javascript">
+        {{ var_name }}.viewer.setSize(...);
+
+        {{ var_name }}.viewer.map.setCenter(...);
+    </script>
+
+Here is the detai of what ``{{ var_name }}`` contains:
+
+* ``viewer`` a ``Geoportal.Viewer`` instance. You can see what it does on the
+  `Geoportal API documentation`_. The ``viewer.map`` object (an
+  ``OpenLayers.Map`` instance) is especially interesting to manipulate.
+
+.. _Geoportal API documentation: https://api.ign.fr/geoportail/api/doc/1.0beta4/jsdoc/
+
+* ``layers``: a list of the layers displayed on the map.
+
+``{{ var_name }}`` also contains several function definitions and some
+internal variables. Feel free to read the generated code and see what's
+interesting.
+
+The ``as var_name`` argument should always be the last argument. If you need
+any option (see below), you should always specify them *before*.
+
 Map options
 -----------
 
-Usage
-`````
+Specifying options
+``````````````````
 
 We've seen a standard map but it has to be customized: the feature color is
 too close to the color of Italy on the map. This is one of the things we can

@@ -20,8 +20,9 @@ class SafeVariable(template.Variable):
 
 
 class MapNode(template.Node):
-    def __init__(self, args):
+    def __init__(self, args, var_name=None):
         self.geo_field = template.Variable(args[1])
+        self.var_name = var_name
         self.options = {}
         if len(args) > 2:
             # Eating empty options, u''
@@ -93,7 +94,10 @@ class MapNode(template.Node):
             'wms_url': utils.WMS_URL,
         })
         loaded = template.loader.get_template('geoportal/map.html')
-        return loaded.render(isolated_context)
+        rendered = loaded.render(isolated_context)
+        if self.var_name is not None:
+            context[self.var_name] = map_var
+        return rendered
 
     def to_boolean(self, var_name):
         try:
@@ -132,4 +136,6 @@ def geoportal_map(parser, token):
     if len(bits) < 2:
         raise template.TemplateSyntaxError('geoportal_map takes at least one '
                                            'argument')
+    if len(bits) > 3 and bits[-2] == 'as':
+        return MapNode(bits[:-2], var_name=bits[-1])
     return MapNode(bits)
