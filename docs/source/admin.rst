@@ -77,7 +77,7 @@ simply done by subclassing the base admin class provided by
     from app.models import Polygon
 
     class PolygonAdmin(admin.GeoPortalAdmin):
-         map_info = False
+         map_info = True
          layers = (
              ('maps', 1),
          )
@@ -93,7 +93,7 @@ interface looks like now:
 .. image:: img/admin.png
 
 Here I have added a polygon that covers all the French part of the Alps. We
-will see it again later. Note that the blue bar has disappeared.
+will see it again later. Note the blue bar at the bottom of the map.
 
 Admin options reference
 ```````````````````````
@@ -120,7 +120,7 @@ to customize your admin widgets.
   Default: ``14``, for a 1:25000 map (best resolution available)
 
 * ``map_info``: show Geoportal's scale and coordinates widget. Default:
-  ``True``
+  ``False``
 
 * ``layers``: A 2-tuple tuple to customize the layers. Default:
   ``( ('maps', 1), )``. The format is ``( ('code', opacity), (..., ...), )``.

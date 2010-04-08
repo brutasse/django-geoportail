@@ -8,6 +8,8 @@ DEFAULT_WIDTH   = getattr(settings, 'GEOPORTAL_DEFAULT_WIDTH', 600)
 DEFAULT_HEIGHT  = getattr(settings, 'GEOPORTAL_DEFAULT_HEIGHT', 400)
 DEFAULT_COLOR   = getattr(settings, 'GEOPORTAL_DEFAULT_COLOR', 'ee9900')
 DEFAULT_OPACITY = getattr(settings, 'GEOPORTAL_DEFAULT_OPACITY', 0.4)
+MEDIA_URL       = getattr(settings, 'GEOPORTAL_MEDIA_URL',
+                          'http://api.ign.fr/geoportail/api/js/1.0/')
 
 LAYERS = {
     # See https://api.ign.fr/geoportail/api/doc/fr/webmaster/layers.html

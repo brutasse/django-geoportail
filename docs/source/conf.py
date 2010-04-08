@@ -173,7 +173,7 @@ htmlhelp_basename = 'Django-geoportaildoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'Django-geoportail.tex', u'Django-geoportail Documentation',
-   u'Bruno Renié', 'manual'),
+   u'Bruno Renié', 'howto'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

@@ -76,7 +76,7 @@ class MapNode(template.Node):
         isolated_context = template.Context({
             'options': self.options,
             'api_key': settings.GEOPORTAL_API_KEY,
-            'MEDIA_URL': settings.MEDIA_URL,
+            'MEDIA_URL': utils.MEDIA_URL,
             'map_var': 'map_%s' % map_var,
             'is_point': ftype in ('POINT', 'MULTIPOINT'),
             'is_linestring': ftype in ('LINESTRING', 'MULTILINESTRING'),

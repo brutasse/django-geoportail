@@ -178,6 +178,7 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     {% if layerswitcher %}{{ module }}.map.addControl(new OpenLayers.Control.LayerSwitcher());{% else %}
     viewer_{{ id }}.setLayersPanelVisibility(false);{% endif %}
     // Then add optional behavior controls
+    {{ module }}.map.addControl(new OpenLayers.Control.PanZoomBar());
     {% if not scrollable %}{{ module }}.map.getControlsByClass('OpenLayers.Control.Navigation')[0].disableZoomWheel();{% endif %}
     {% endblock %}
     if (wkt){

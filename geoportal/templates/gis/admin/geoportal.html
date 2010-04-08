@@ -35,6 +35,9 @@
 {% block openlayers %}{% include "gis/admin/geoportal.js" %}{% endblock %}
 //]]>
 </script>
+<style type="text/css">
+  .gpMainMapCell { border: none; }
+</style>
 <div id="{{ id }}_map"{% if LANGUAGE_BIDI %} dir="ltr"{% endif %}></div>
 <a href="javascript:{{ module }}.clearFeatures()">Delete all Features</a>
 {% if display_wkt %}<p> WKT debugging window:</p>{% endif %}

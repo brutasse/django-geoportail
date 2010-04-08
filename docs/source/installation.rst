@@ -55,14 +55,6 @@ The development of *django-geoportail* is done on the `mercurial repository`_
 hosted on bitbucket. This is where you can contribute to fix bugs and add new
 features. However, the mercurial repository may not be stable all the time.
 
-If you want the development version::
-
-    $ hg clone http://bitbucket.org/bruno/django-geoportail/
-    $ cd django-geoportail
-    $ python setup.py install
-
-.. _mercurial repository: http://bitbucket.org/bruno/django-geoportail/
-
 If you want a stable installation, it is recommended to use the python
 package. If you have ``pip`` installed, you can run::
 
@@ -70,7 +62,15 @@ package. If you have ``pip`` installed, you can run::
 
 or, if you just have ``easy_install``::
 
-    $ easy_install django-geoportail
+    $ easy_install -U django-geoportail
+
+If you want the development version::
+
+    $ hg clone http://bitbucket.org/bruno/django-geoportail/
+    $ cd django-geoportail
+    $ python setup.py install
+
+.. _mercurial repository: http://bitbucket.org/bruno/django-geoportail/
 
 Now, *django-geoportail* is available in you python path. You can check the
 installation in a python shell::
@@ -100,36 +100,38 @@ Once you've done it, try to run your tests for the whole project or just
     ./manage.py test # for the whole project
     ./manage.py test geoportal # only django-geoportail's tests
 
-If it works as expected (i.e. the tests pass), you are almost ready to use
-*django-geoportail*. Almost.
+If it works as expected (i.e. the tests pass), you're ready to use
+*django-geoportail*.
+
+.. _media-files:
 
 Media files
 -----------
 
-*Django-geoportal* ships with a bunch of media files:
+.. warning:: Optional step
+
+    This step is optional and you probably don't need to do it, unless you
+    know what you're doing. This is about serving the Geoportal JS API
+    yourself instead of having to rely on the hosted version.
+
+*Django-geoportal* requires a bunch of media files:
 
 * The Geoportal.js library (contains OpenLayers and some custom classes)
 * Some static files used when maps are displayed on your site
 
-Of course, you have to add those media files to your project.
-*Django-geoportal* expects to see those under the <media_url>/geoportal, where
-media_url is the MEDIA_URL from your project's settings file.
+By default, *django-geoportail* will use the hosted versions of these files on
+`api.ign.fr`_. However, if you prefer to host them yourself, you can get them
+from the `downloads`_ section of the Geoportal website. Once you've grabbed
+the files, put them into a subdirectory of your project's ``MEDIA_ROOT`` and
+set ``GEOPORTAL_MEDIA_URL`` to the public URL of this subdirectory in your
+project settings:
 
-You can create a symlink or just copy the whole directory to your project's
-media directory:
+.. code-block:: python
 
-* Using the symlink::
+    GEOPORTAL_MEDIA_URL = 'http://media.example.com/geoportal/'
 
-      $ cd /path/to/project/media
-      $ ln -s /path/to/site-packages/django-geoportal/media geoportal
+The trailing slash is required. This directory should contain
+``Geoportal.js``, ``GeoportalExtended.js`` and a ``theme`` directory.
 
-* Copying the whole directory::
-
-      $ cd /path/to/project/media
-      $ cp -a /path/to/site-packages/django-geoportal/media geoportal
-
-It is recommended to create a symlink to always have up-to-date files when you
-update *django-geoportail*. However, depending on your production environment,
-you may need to copy the files for the web server to serve them.
-
-You're now ready to start experimenting with *django-geoportail*.
+.. _api.ign.fr: http://api.ign.fr
+.. _downloads: https://api.ign.fr/geoportail/api/doc/fr/developpeur/download.html

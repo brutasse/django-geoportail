@@ -42,3 +42,7 @@ Settings reference
 
 * ``GEOPORTAL_API_KEY`` is a required setting and no map will show up until
   you set it to the key given by the IGN. See :ref:`ign-api-access`.
+
+* ``GEOPORTAL_MEDIA_URL`` points to the Geoportal Javascript library. The
+  default value is ``http://api.ign.fr/geoportail/api/js/1.0/``, which is the
+  hosted version. If you want to host it yourself, see :ref:`media-files`.

@@ -1,3 +1,10 @@
+2010-04-08 Bruno Renié <bruno@renie.fr>
+
+    * Changed map_info to be false by default
+    * Switched to the hosted version of the JS API
+    * Added the PanZoomBar control to all maps in the admin widget
+    * Updated the docs and screenshots accordingly
+
 2010-03-03 Bruno Renié <bruno@renie.fr> -- 0.2.2
 
     * Added some tests for the template rendering

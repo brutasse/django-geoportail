@@ -28,7 +28,7 @@ class GeoPortalAdmin(GeoModelAdmin):
     default_lat = 47 # is France
 
     # Show map info or not
-    map_info = True
+    map_info = False
 
     # Layers
     layers = (
@@ -46,7 +46,7 @@ class GeoPortalAdmin(GeoModelAdmin):
     ###############
     map_template = 'gis/admin/geoportal.html'
     wms_url = utils.WMS_URL
-    openlayers_url = 'geoportal/GeoportalExtended.js'
+    openlayers_url = utils.MEDIA_URL + 'GeoportalExtended.js'
 
     # Mouse position: already displayed by Geoportail
     mouse_position = False
