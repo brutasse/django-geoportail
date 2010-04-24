@@ -10,8 +10,7 @@ Installation, long story short:
    * pip install django-geoportail, or
    * python setup.py install
  * Add ``geoportal`` to your ``INSTALLED_APPS`` (for templates)
- * Copy or symlink the ``media`` subfolder to <your_project_media>/geoportal
- * Set ``GEOPORTAL_API_KEY`` in your ``settings.py`` to the API key yo got
+ * Set ``GEOPORTAL_API_KEY`` in your ``settings.py`` to the API key you got
    here: https://api.ign.fr/geoportail/registration.do
 
-See docs/ for instructions.
+See docs/ for detailed instructions.

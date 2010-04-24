@@ -46,7 +46,7 @@ simplest way to display a geographic field is (assuming you have a
 
 .. code-block:: jinja
 
-    {% geoportal_tag model_instance.geo_field %}
+    {% geoportal_map model_instance.geo_field %}
 
 When this template tag is called, *django-geoportail* renders all the
 javascript code that is needed to display the field, and renders a map with
@@ -118,14 +118,14 @@ Here is an example of rendering a map with ``option1`` set to ``1`` and
 
 .. code-block:: jinja
 
-    {% geoportal_tag model_instance.geo_field option1=1, option2=ff0000 %}
+    {% geoportal_map model_instance.geo_field option1=1, option2=ff0000 %}
 
 Option values can be static strings or template variables. If ``some_value``
 is available in the template context, calling
 
 .. code-block:: jinja
 
-    {% geoportal_tag model_instance.geo_field option1=some_value %}
+    {% geoportal_map model_instance.geo_field option1=some_value %}
 
 will resolve ``some_value`` from the template context. This can be very
 useful when some parameters have to be dynamic.
@@ -174,7 +174,7 @@ Let's finish with an example:
 
 .. code-block:: jinja
 
-    {% geoportal_tag model_instance.point color=ff0000, opacity=0.7, zoom=14, width=300, height=300 %}
+    {% geoportal_map model_instance.point color=ff0000, opacity=0.7, zoom=14, width=300, height=300 %}
 
 Here we generate a squared (300x300 pixels) map of a point. The point will be
 red with a rather high opacity. The zoom level is forced to ``14`` in case it
