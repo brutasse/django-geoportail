@@ -1,5 +1,4 @@
 include *.txt
 recursive-include geoportal *.py *.html *.js
-recursive-include media *
 include docs/Makefile
 recursive-include docs/source *
