@@ -6,7 +6,8 @@ from geoportal import utils
 if not hasattr(settings, 'GEOPORTAL_API_KEY'):
     # Just raising a warning, it's not fatal after all
     import warnings
-    warnings.warn("GEOPORTAL_API_KEY could not be found in your settings. It is necessary to get maps to work.")
+    warnings.warn("GEOPORTAL_API_KEY could not be found in your settings. "
+                  "It is necessary to get maps to work.")
 
 
 class GeoPortalAdmin(GeoModelAdmin):

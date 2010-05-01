@@ -2,6 +2,7 @@ from geoportal import utils, admin, templatetags
 
 VERSION = (0, 2, 3)
 
+
 def get_version():
     version = '%s.%s' % (VERSION[0], VERSION[1])
     if VERSION[2]:

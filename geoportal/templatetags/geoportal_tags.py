@@ -12,6 +12,7 @@ register = template.Library()
 
 
 class SafeVariable(template.Variable):
+
     def resolve(self, context):
         try:
             return super(SafeVariable, self).resolve(context)
@@ -20,6 +21,7 @@ class SafeVariable(template.Variable):
 
 
 class MapNode(template.Node):
+
     def __init__(self, args, var_name=None):
         self.geo_field = template.Variable(args[1])
         self.var_name = var_name
@@ -48,8 +50,10 @@ class MapNode(template.Node):
         is_collection = ftype in ('MULTIPOINT', 'MULTILINESTRING',
                                   'MULTIPOLYGON', 'GEOMETRYCOLLECTION')
         if is_collection:
-            if ftype == 'GEOMETRYCOLLECTION': collection_type = 'Any'
-            else: collection_type = OGRGeomType(ftype.replace('MULTI', ''))
+            if ftype == 'GEOMETRYCOLLECTION':
+                collection_type = 'Any'
+            else:
+                collection_type = OGRGeomType(ftype.replace('MULTI', ''))
         else:
             collection_type = 'None'
 
@@ -65,7 +69,7 @@ class MapNode(template.Node):
             self.options['height'] = utils.DEFAULT_HEIGHT
 
         if not 'color' in self.options:
-            self.options['color'] = utils.DEFAULT_COLOR;
+            self.options['color'] = utils.DEFAULT_COLOR
 
         if not 'opacity' in self.options:
             self.options['opacity'] = utils.DEFAULT_OPACITY
@@ -127,7 +131,8 @@ def geoportal_map(parser, token):
      * width (pixels)    400
      * height (pixels)   300
      * visible (1|0)     1
-     * color (rrggbb)    ee9900 (OpenLayers.Feature.Vector.style["default"]["fillColor"])
+     * color (rrggbb)    ee9900 (OpenLayers.Feature.Vector
+                                 .style["default"]["fillColor"])
      * opacity (0 -> 1)  0.4
      * zoom (~3 -> 14)   if not provided, calculated automatically
      * navigation (1|0)  turn navigation on

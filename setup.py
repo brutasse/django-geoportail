@@ -6,10 +6,11 @@ setup(
     version='0.2.3',
     author=u'Bruno Renie',
     author_email='bruno@renie.fr',
-    packages=['geoportal',],
+    packages=['geoportal'],
     url='http://bitbucket.org/bruno/django-geoportail',
-    license=open('LICENCE.txt').read(),
-    description='Add maps and photos from the French National Geographic Institute to GeoDjango',
+    license='BSD licence, see LICENCE.txt',
+    description='Add maps and photos from the French National Geographic' + \
+                'Institute to GeoDjango',
     long_description=open('README.txt').read(),
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -21,5 +22,5 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: JavaScript',
         'Topic :: Scientific/Engineering :: GIS',
-    ]
+    ],
 )

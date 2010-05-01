@@ -12,6 +12,7 @@ BASE_TEMPLATE = """
 
 
 class GeoportalUtilsTest(TestCase):
+
     def test_utils(self):
         self.assertEquals(len(geoportal.utils.LAYERS), 12)
 
@@ -37,11 +38,18 @@ class TestModel(models.Model):
 
 
 class GeoTemplateTest(TestCase):
+
     def setUp(self):
         self.geo_model = TestModel(
             point='POINT (6.8643511274086046 45.8325858329590829)',
-            line='LINESTRING (-4.8687808591351045 48.5177935040483490, -3.9600705509226786 48.7201659712547794, -3.6126224919002792 48.6833709772172654)',
-            polygon='POLYGON((1.1981967868713883 48.59138349212341,1.331830655726157 46.714838796209094,6.062469613184964 46.64124880813403,4.9666718885758625 48.70176847423602,1.1981967868713883 48.59138349212341))'
+            line='LINESTRING (-4.8687808591351045 48.5177935040483490, ' + \
+                             '-3.9600705509226786 48.7201659712547794, ' + \
+                             '-3.6126224919002792 48.6833709772172654)',
+            polygon='POLYGON((1.1981967868713883 48.59138349212341,' + \
+                             '1.331830655726157 46.714838796209094,' + \
+                             '6.062469613184964 46.64124880813403,' + \
+                             '4.9666718885758625 48.70176847423602,' + \
+                             '1.1981967868713883 48.59138349212341))',
         )
 
     def tearDown(self):
@@ -54,8 +62,8 @@ class GeoTemplateTest(TestCase):
 
     def test_template_with_options(self):
         context = {'geo_field': self.geo_model.line}
-        rendered = Template(BASE_TEMPLATE % 'width=120, height=150').render(context)
-        self.assertTrue(str(self.geo_model.line) in rendered)
+        tmpl = Template(BASE_TEMPLATE % 'width=120, height=150')
+        self.assertTrue(str(self.geo_model.line) in tmpl.render(context))
 
     def test_invalid_template(self):
         context = {'geo_field': self.geo_model.line}
@@ -66,7 +74,8 @@ class GeoTemplateTest(TestCase):
         context = {'geo_field': self.geo_model.polygon,
                    'map_width': 200,
                    'map_height': 400}
-        rendered = Template(BASE_TEMPLATE % 'width=map_width, height=map_height').render(context)
+        template_str = BASE_TEMPLATE % 'width=map_width, height=map_height'
+        rendered = Template(template_str).render(context)
         self.assertTrue('width: 200px; height: 400px;' in rendered)
         self.assertTrue(str(self.geo_model.polygon) in rendered)
 
