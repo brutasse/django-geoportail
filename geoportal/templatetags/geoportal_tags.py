@@ -1,11 +1,11 @@
 from django import template
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from django.contrib.gis.gdal import OGRGeomType
 
 from geoportal import utils
 
-import itertools
 import random
 
 register = template.Library()
@@ -80,7 +80,6 @@ class MapNode(template.Node):
         isolated_context = template.Context({
             'options': self.options,
             'api_key': settings.GEOPORTAL_API_KEY,
-            'MEDIA_URL': utils.MEDIA_URL,
             'map_var': 'map_%s' % map_var,
             'is_point': ftype in ('POINT', 'MULTIPOINT'),
             'is_linestring': ftype in ('LINESTRING', 'MULTILINESTRING'),
@@ -144,3 +143,9 @@ def geoportal_map(parser, token):
     if len(bits) > 3 and bits[-2] == 'as':
         return MapNode(bits[:-2], var_name=bits[-1])
     return MapNode(bits)
+
+
+@register.simple_tag
+def geoportal_js():
+    return mark_safe('<script type="text/javascript" ' + \
+                     'src="%sGeoportal.js"></script>' % utils.MEDIA_URL)

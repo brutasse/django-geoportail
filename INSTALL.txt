@@ -13,4 +13,4 @@ Installation, long story short:
  * Set ``GEOPORTAL_API_KEY`` in your ``settings.py`` to the API key you got
    here: https://api.ign.fr/geoportail/registration.do
 
-See docs/ for detailed instructions.
+See the online docs for detailed instructions.

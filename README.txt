@@ -5,8 +5,7 @@ Django-Geoportail
 Geodjango with the maps and photos from the French National Geographic
 Institute.
 
-* Installation and documentation: see INSTALL, docs/ and the `online
-  documentation`_
+* Installation and documentation: see INSTALL and the `online documentation`_
 
   .. _online documentation: http://packages.python.org/django-geoportail/
 

@@ -1,19 +1,4 @@
-<script text="text/javascript">
-	// Loading the Geoportal lib once -- if it's here don't bother retrieving it again
-	if (typeof(Geoportal) == 'object') { } else {
-		var head= document.getElementsByTagName('head')[0];
-		var script= document.createElement('script');
-		script.type= 'text/javascript';
-		script.src= '{{ MEDIA_URL }}Geoportal.js';
-		head.appendChild(script);
-	}
-</script>
-
 <div id="{{ map_var }}_map" style="width: {{ options.width }}px; height: {{ options.height }}px;"></div>
-
-<style type="text/css">
-	.gpMainMapCell { border: none; }
-</style>
 
 <script type="text/javascript">
 	var {{ map_var }} = {};
@@ -106,3 +91,8 @@
 	};
 	{{ map_var }}.init();
 </script>
+
+<style type="text/css">
+	.gpMainMapCell, .gpMainMap { border: none; }
+</style>
+

@@ -1,3 +1,7 @@
+2010-05-01 Bruno Renié <bruno@renie.fr>
+
+    * Fixed cross-browser issues by adding a 'geoportal_js' tag
+
 2010-04-24 Bruno Renié <bruno@renie.fr> -- 0.2.3
 
     * Released 0.2.3

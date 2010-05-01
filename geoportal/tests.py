@@ -10,6 +10,11 @@ BASE_TEMPLATE = """
 {%% geoportal_map geo_field %s %%}
 """
 
+JS_TEMPLATE = """
+{% load geoportal_tags %}
+{% geoportal_js %}
+"""
+
 
 class GeoportalUtilsTest(TestCase):
 
@@ -66,7 +71,6 @@ class GeoTemplateTest(TestCase):
         self.assertTrue(str(self.geo_model.line) in tmpl.render(context))
 
     def test_invalid_template(self):
-        context = {'geo_field': self.geo_model.line}
         self.assertRaises(TemplateSyntaxError,
                 lambda: Template(BASE_TEMPLATE % 'some_option=some_value'))
 
@@ -92,3 +96,7 @@ class GeoTemplateTest(TestCase):
 
         # This is a 5-char random string
         self.assertEquals(len(context['some_variable']), 5)
+
+    def test_javascript_tag(self):
+        rendered = Template(JS_TEMPLATE).render({})
+        self.assertTrue('<script type="text/javascript" src="' in rendered)

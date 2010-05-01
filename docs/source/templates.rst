@@ -24,6 +24,18 @@ There are two ways to enable this library:
 
       {% load geoportal_tags %}
 
+Once you've loaded the template library, you need to load the geoportal
+javascript library on each page that displays a map. This is achieved by
+adding the following in the ``head`` section of your template:
+
+.. code-block:: jinja
+
+    {% geoportal_js %}
+
+The above code will add a ``<script>`` tag that calls the Geoportal library.
+This has to be done **before** the ``geoportal_map`` tag is called: the
+javascript library has to be loaded synchronously.
+
 The {% geoportal_map %} template tag
 ------------------------------------
 
