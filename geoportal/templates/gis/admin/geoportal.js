@@ -149,10 +149,11 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
       } else {
 	{{ module }}.layers.vector.addFeatures([admin_geom]);
       }
-      // Zooming to the bounds - ZOOM TWICE, THAT'S MAGIC
+      // Zooming to the bounds - ZOOM 3 TIMES, THAT'S MAGIC
       {{ module }}.map.zoomToExtent(admin_geom.geometry.getBounds());
       {{ module }}.map.zoomToExtent(admin_geom.geometry.getBounds());
-      if ({{ module }}.is_point){
+      {{ module }}.map.zoomToExtent(admin_geom.geometry.getBounds());
+      if ({{ module }}.is_point && !{{ module }}.is_collection){
           {{ module }}.map.zoomTo({{ point_zoom }}); 
       }
     } else {
