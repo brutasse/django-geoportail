@@ -78,7 +78,7 @@ installation in a python shell::
     $ python
     >>> import geoportal
     >>> geoportal.get_version()
-    '0.3'
+    '0.3.1'
 
 And of course, add ``geoportal`` to your django project's ``INSTALLED_APPS``.
 In ``settings.py``:
