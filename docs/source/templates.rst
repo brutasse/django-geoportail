@@ -24,6 +24,11 @@ There are two ways to enable this library:
 
       {% load geoportal_tags %}
 
+.. _load-js:
+
+Loading the javascript library
+``````````````````````````````
+
 Once you've loaded the template library, you need to load the geoportal
 javascript library on each page that displays a map. This is achieved by
 adding the following in the ``head`` section of your template:

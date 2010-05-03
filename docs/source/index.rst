@@ -38,6 +38,7 @@ all steps to plug Geoportal's data to your site:
    installation
    admin
    templates
+   forms
    settings
 
 .. warning:: Contributions are welcome!

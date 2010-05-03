@@ -14,6 +14,8 @@ If you override a setting, its value will be used in the admin and in the
 template system given that you haven't set it manually in the admin class or
 in the templatetag option.
 
+.. _settings-ref:
+
 Settings reference
 ------------------
 

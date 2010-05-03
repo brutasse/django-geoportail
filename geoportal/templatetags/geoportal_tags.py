@@ -147,5 +147,5 @@ def geoportal_map(parser, token):
 
 @register.simple_tag
 def geoportal_js():
-    return mark_safe('<script type="text/javascript" ' + \
-                     'src="%sGeoportalExtended.js"></script>' % utils.MEDIA_URL)
+    return mark_safe('<script type="text/javascript" src=' + \
+                     '"%sGeoportalExtended.js"></script>' % utils.MEDIA_URL)

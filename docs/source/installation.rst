@@ -78,7 +78,7 @@ installation in a python shell::
     $ python
     >>> import geoportal
     >>> geoportal.get_version()
-    '0.2.3'
+    '0.3'
 
 And of course, add ``geoportal`` to your django project's ``INSTALLED_APPS``.
 In ``settings.py``:
@@ -131,7 +131,8 @@ project settings:
     GEOPORTAL_MEDIA_URL = 'http://media.example.com/geoportal/'
 
 The trailing slash is required. This directory should contain
-``Geoportal.js``, ``GeoportalExtended.js`` and a ``theme`` directory.
+``Geoportal.js``, ``GeoportalExtended.js`` and an ``img`` and a ``theme``
+directory.
 
 .. _api.ign.fr: http://api.ign.fr
 .. _downloads: https://api.ign.fr/geoportail/api/doc/fr/developpeur/download.html

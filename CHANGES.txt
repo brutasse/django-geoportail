@@ -1,3 +1,7 @@
+2010-05-03 Bruno Renié <bruno@renie.fr> -- 0.3
+
+    * Added a form library with rich widgets and relevant docs
+
 2010-05-01 Bruno Renié <bruno@renie.fr>
 
     * Fixed cross-browser issues by adding a 'geoportal_js' tag

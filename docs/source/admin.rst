@@ -95,6 +95,8 @@ interface looks like now:
 Here I have added a polygon that covers all the French part of the Alps. We
 will see it again later. Note the blue bar at the bottom of the map.
 
+.. _admin-ref:
+
 Admin options reference
 ```````````````````````
 

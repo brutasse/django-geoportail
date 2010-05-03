@@ -100,3 +100,53 @@ class GeoTemplateTest(TestCase):
     def test_javascript_tag(self):
         rendered = Template(JS_TEMPLATE).render({})
         self.assertTrue('<script type="text/javascript" src="' in rendered)
+
+
+class TestForm(geoportal.forms.Form):
+    name = geoportal.forms.CharField(max_length=255)
+    point = geoportal.forms.PointField()
+
+
+class CustomForm(geoportal.forms.Form):
+    """ Lots of overriden attributes """
+    multipolygon = geoportal.forms.MultiPolygonField(
+        widget=geoportal.forms.MultiPolygonWidget(attrs={
+            'width': 300,
+            'height': 350,
+            'color': 'eeccaa',
+            'opacity': 0.1,
+            'srid': 900913,
+            'layers': (('photos', 1),),
+        },
+    ))
+
+
+class FormsTests(TestCase):
+
+    def test_field(self):
+        form = TestForm(data={
+            'name': 'Testing',
+            'point': 'SRID=4326;POINT(3.363065462318639 46.44807508943696)',
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_widget(self):
+        form = TestForm()
+        for field in form:
+            if field.name == 'point':
+                fld = '%s' % field
+                self.assertTrue('point.is_point = true;' in fld)
+                self.assertTrue('point.is_collection = false;' in fld)
+
+    def test_custom_widget(self):
+        form = CustomForm()
+        for field in form:
+            fld = '%s' % field
+            self.assertTrue('multipolygon.is_point = false;' in fld)
+            self.assertTrue('multipolygon.is_collection = true;' in fld)
+            self.assertTrue('multipolygon.is_polygon = true;' in fld)
+            self.assertTrue('style="width: 300px; height: 350px;"' in fld)
+            self.assertTrue('EPSG:900913' in fld)
+            self.assertTrue("strokeColor: '#eeccaa'" in fld)
+            self.assertTrue('fillOpacity: 0.1,' in fld)
+            self.assertTrue('ORTHOIMAGERY.ORTHOPHOTOS:WMSC' in fld)
