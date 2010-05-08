@@ -1,3 +1,9 @@
+2010-05-08 Bruno Renié <bruno@renie.fr>
+
+    * Added transitionEffect: 'resize' to all widgets for better UX
+    * Fixed setup.py again
+    * Removed hardcoded SRID in the admin widget
+
 2010-05-03 Bruno Renié <bruno@renie.fr> -- 0.3.1
 
     * Fixed setup.py and released 0.3.1

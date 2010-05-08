@@ -125,7 +125,7 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     {% if not map_info %}viewer_{{ id }}.setInformationPanelVisibility(false);{% endif %}
     // Add all the available layers
     {% for layer in layers %}
-    viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1});
+    viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1, transitionEffect: 'resize'});
     {% endfor %}{{ module }}.map = viewer_{{ id }}.map;
     {% if is_linestring %}OpenLayers.Feature.Vector.style["default"]["strokeWidth"] = 3; // Default too thin for linestrings. {% endif %}
     OpenLayers.Feature.Vector.style["default"]["fillOpacity"] = {{ feature_opacity }};
