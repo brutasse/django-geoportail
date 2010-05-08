@@ -43,6 +43,7 @@ class MapNode(template.Node):
         # Generate a probably unique name for javascript variables -- in case
         # there are several maps on a page
         map_var = ''.join(random.sample('abcdefghijklmopqrstuvwxyz', 5))
+        map_var = 'map_' + map_var
 
         # Field type
         geo_field = self.geo_field.resolve(context)
@@ -80,7 +81,7 @@ class MapNode(template.Node):
         isolated_context = template.Context({
             'options': self.options,
             'api_key': settings.GEOPORTAL_API_KEY,
-            'map_var': 'map_%s' % map_var,
+            'map_var': map_var,
             'is_point': ftype in ('POINT', 'MULTIPOINT'),
             'is_linestring': ftype in ('LINESTRING', 'MULTILINESTRING'),
             'is_polygon': ftype in ('POLYGON', 'MULTIPOLYGON'),

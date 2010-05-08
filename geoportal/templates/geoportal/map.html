@@ -60,11 +60,11 @@
 				{% if is_linestring %}strokeWidth: 3,{% endif %}
 				strokeColor: '#{{ options.color }}'},
 			OpenLayers.Feature.Vector.style["default"]))
-		{{ map_var }}.layers.vector = new OpenLayers.Layer.Vector("{{ field_name }}", {styleMap: styleMap});
+		{{ map_var }}.layers.vector = new OpenLayers.Layer.Vector(
+				"{{ field_name }}",
+				{styleMap: styleMap{% if not options.visible %}, visibility: false{% endif %} });
 
-		{% if options.visible %}
 		{{ map_var }}.viewer.map.addLayer({{ map_var }}.layers.vector);
-		{% endif %}
 
 		var wkt = '{{ wkt }}';
 		var geom = {{ map_var }}.read_wkt(wkt);
