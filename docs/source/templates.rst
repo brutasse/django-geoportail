@@ -99,7 +99,7 @@ javascript code:
         {{ var_name }}.viewer.map.setCenter(...);
     </script>
 
-Here is the detai of what ``{{ var_name }}`` contains:
+Here is the detail of what ``{{ var_name }}`` contains:
 
 * ``viewer`` a ``Geoportal.Viewer`` instance. You can see what it does on the
   `Geoportal API documentation`_. The ``viewer.map`` object (an

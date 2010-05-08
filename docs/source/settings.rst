@@ -10,9 +10,9 @@ project settings, and if no value is found it provides a default value. All
 the settings are prefixed by ``GEOPORTAL_`` to avoid conflicts with other
 apps.
 
-If you override a setting, its value will be used in the admin and in the
-template system given that you haven't set it manually in the admin class or
-in the templatetag option.
+If you override a setting, its value will be used in the admin, the template
+system and the forms library, given that you haven't set it manually in the
+admin class or in the templatetag/widget options.
 
 .. _settings-ref:
 
