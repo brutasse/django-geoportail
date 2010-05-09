@@ -73,12 +73,12 @@ If you want the development version::
 .. _mercurial repository: http://bitbucket.org/bruno/django-geoportail/
 
 Now, *django-geoportail* is available in you python path. You can check the
-installation in a python shell::
+installation in the django shell of your project::
 
-    $ python
+    $ python manage.py shell
     >>> import geoportal
     >>> geoportal.get_version()
-    '0.3.1'
+    '0.4'
 
 And of course, add ``geoportal`` to your django project's ``INSTALLED_APPS``.
 In ``settings.py``:
