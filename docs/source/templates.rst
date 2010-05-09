@@ -41,14 +41,14 @@ The above code will add a ``<script>`` tag that calls the Geoportal library.
 This has to be done **before** the ``geoportal_map`` tag is called: the
 javascript library has to be loaded synchronously.
 
-The {% geoportal_map %} template tag
-------------------------------------
+Rendering a map: the {% geoportal_map %} template tag
+-----------------------------------------------------
 
 Syntax:
 
 .. code-block:: jinja
 
-    {% geoportal_map field option1=value, option2=other_value [as var_name] %}
+    {% geoportal_map field [option1=value, option2=other_value] [as var_name] %}
 
 Basic usage
 ```````````
@@ -202,3 +202,80 @@ The result is, as we can expect (oh, and the point has the coordinates of the
 
 .. image:: img/template-custom.png
    :align: center
+
+Adding external features
+------------------------
+
+In this section, we assume that you have displayed a map on your page using
+the ``geoportal_map`` template tag, and you've added it to your template
+context:
+
+.. code-block:: html+django
+
+    {% geoportal_map my_field as var_name %}
+
+Now, you can render KML and GPX filed with the corresponding template tags.
+
+KML: the {% geoportal_kml %} tag
+````````````````````````````````
+
+Syntax:
+
+.. code-block:: html+django
+
+    {% geoportal_kml map_var kml_url [option1=value1, option2=value2 ...] %}
+
+The two required arguments are:
+
+* ``map_var``: this is the template variable containing the map name.
+
+* ``kml_url``: the URL to the KML file. It can be a template variable or a raw
+  string.
+
+Options are comma-separated, using the key=value syntax described in the
+``geoportal_map`` section. The values can be raw strings or template
+variables. The available options are:
+
+* ``width``: the width of the border of the feature. Default: 2.
+
+* ``opacity``: the opacity of the innner part of the ferature. Default: 0.4 or
+  the value of ``GEOPORTAL_DEFAULT_OPACITY`` if you've overriden it.
+
+* ``color``: the color of the feature. Default: OpenLayers' default, or the
+  value of ``GEOPORTAL_DEFAULT_COLOR`` if you've overriden it.
+
+* ``extract``: a boolean specifying whether the KML attributes and styles
+  should be extracted from the feature. Default is 1 (true), you may want to
+  switch it off for better performance if you render a lot (hundreds) of
+  features or if you want to style the features yourself.
+
+.. note:: On style extraction
+
+    If you don't specify any options, the feature will be styled according to
+    the KML file you're loading. If you specify any styling option manually,
+    no style will be extracted from the feature. That means you can't specify
+    ``extract=1`` and ``width=4`` at the same time for example. Setting
+    **any** other option will autmatically set ``extract`` to 0 and the
+    remaning ones to to their default values.
+
+GPX: the {% geoportal_gpx %} tag
+````````````````````````````````
+
+Syntax:
+
+.. code-block:: html+django
+
+    {% geoportal_gpx map_var gpx_url [option1=value1, option2=value2 ...] %}
+
+Like with the ``geoportal_kml`` tag, you need to specify the map variable and
+the URL of the GPX file.
+
+The available options are:
+
+* ``color``: the color of the GPX feature. Default: OpenLayers's default or
+  the value of ``GEOPORTAL_DEFAULT_COLOR``.
+
+* ``opacity``: the opacity to apply to the **stroke** of the feature, unlike
+  the ``opacity`` parameter of the KML tag. Default: 1.
+
+* ``width``: the width of the stroke, in pixels. Default: 2.

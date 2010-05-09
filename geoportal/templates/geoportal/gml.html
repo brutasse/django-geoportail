@@ -1,0 +1,43 @@
+<script type="text/javascript">
+	var extract = {{ extract|yesno:"true,false" }};
+	{% ifequal format 'kml' %}
+	var format = new OpenLayers.Format.KML({
+		extractStyles: extract,
+		extractAttributes: extract,
+		maxDepth: 2
+	});
+	{% endifequal %}{% ifequal format 'gpx' %}
+	var format = new OpenLayers.Format.GPX({
+		extractWaypoints: extract,
+		extractTracks: extract,
+		extractRoutes: extract,
+		extractAttributes: extract
+	});{% endifequal %}
+
+	var protocol = new OpenLayers.Protocol.HTTP({
+		url: '{{ url }}',
+		format: format,
+	});
+
+	{% if style or not extract %}
+	var styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
+			fillColor: '#{{ color }}',
+			strokeColor: '#{{ color }}',
+			fillOpacity: {{ opacity }},
+			{% if style %}strokeOpacity: {{ opacity }},{% endif %}
+			strokeWidth: {{ width }},
+		},
+		OpenLayers.Feature.Vector.style['default'])
+	);{% endif %}
+
+	{% with format|upper as type %}
+	var {{ format }} = new OpenLayers.Layer.Vector('{{ type }}', {
+		projection: new OpenLayers.Projection('EPSG:4326'),
+		strategies: [new OpenLayers.Strategy.Fixed()],
+		protocol: protocol,{% if style or not extract %}
+		styleMap: styleMap{% endif %}
+	});
+	{% endwith %}
+
+	{{ map_var }}.viewer.map.addLayer({{ format }});
+</script>

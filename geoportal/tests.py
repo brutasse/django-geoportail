@@ -15,6 +15,18 @@ JS_TEMPLATE = """
 {% geoportal_js %}
 """
 
+KML_TEMPLATE = """
+{%% load geoportal_tags %%}
+{%% geoportal_map geo_field as var_name %%}
+{%% geoportal_kml var_name %s %%}
+"""
+
+GPX_TEMPLATE = """
+{%% load geoportal_tags %%}
+{%% geoportal_map geo_field as var_name %%}
+{%% geoportal_gpx var_name %s %%}
+"""
+
 
 class GeoportalUtilsTest(TestCase):
 
@@ -74,6 +86,12 @@ class GeoTemplateTest(TestCase):
         self.assertRaises(TemplateSyntaxError,
                 lambda: Template(BASE_TEMPLATE % 'some_option=some_value'))
 
+        self.assertRaises(TemplateSyntaxError,
+                lambda: Template(KML_TEMPLATE % ''))
+
+        self.assertRaises(TemplateSyntaxError,
+                lambda: Template(GPX_TEMPLATE % ''))
+
     def test_template_with_variable(self):
         context = Context({'geo_field': self.geo_model.polygon,
                            'map_width': 200,
@@ -99,6 +117,28 @@ class GeoTemplateTest(TestCase):
     def test_javascript_tag(self):
         rendered = Template(JS_TEMPLATE).render(Context({}))
         self.assertTrue('<script type="text/javascript" src="' in rendered)
+
+    def test_kml(self):
+        context = Context({'geo_field': self.geo_model.polygon})
+        rendered = Template(KML_TEMPLATE % '/kml_url.kml').render(context)
+        self.assertTrue('var extract = true;' in rendered)
+        self.assertTrue('new OpenLayers.Format.KML' in rendered)
+        self.assertTrue("url: '/kml_url.kml'," in rendered)
+
+        tmpl = Template(KML_TEMPLATE % '/kml_url.kml width=5')
+        rendered = tmpl.render(context)
+        self.assertTrue('var extract = false;' in rendered)
+
+    def test_gpx(self):
+        context = Context({'geo_field': self.geo_model.polygon})
+        rendered = Template(GPX_TEMPLATE % '/gpx_url.gpx').render(context)
+        self.assertTrue('var extract = true;' in rendered)
+        self.assertTrue('new OpenLayers.Format.GPX' in rendered)
+        self.assertTrue("url: '/gpx_url.gpx'," in rendered)
+
+        tmpl = Template(GPX_TEMPLATE % '/gpx_url.gpx opacity=0.7')
+        rendered = tmpl.render(context)
+        self.assertTrue('var extract = true;' in rendered)
 
 
 class TestForm(geoportal.forms.Form):

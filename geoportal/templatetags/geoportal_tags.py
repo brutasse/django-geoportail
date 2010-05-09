@@ -20,24 +20,41 @@ class SafeVariable(template.Variable):
             return self.var
 
 
-class MapNode(template.Node):
+class OptionsNode(template.Node):
+    """A template node with a nice option parsing bahaviour."""
+    args = 0  # Number of required arguments
+    available_options = ()  # List of options the parser should recognize
+
+    def parse_options(self, args):
+        self.options = {}
+        if len(args) > self.args:
+            # Eating empty options, u''
+            options = [o for o in ''.join(args[self.args:]).split(',') if o]
+            for o in options:
+                key, value = o.split('=')
+                if not key in self.available_options:
+                    raise template.TemplateSyntaxError('"%s" option is not su'
+                            'pported. Available options are: %s' % (key,
+                            ', '.join(self.available_options)))
+                self.options[key] = SafeVariable(value)
+
+    def to_boolean(self, var_name):
+        try:
+            self.options[var_name] = bool(int(self.options[var_name]))
+        except ValueError:
+            raise template.TemplateSyntaxError('"%s" can be either 0 or 1 (was'
+                ': "%s")' % (var_name, self.options[var_name]))
+
+
+class MapNode(OptionsNode):
+    args = 2
+    available_options = ('width', 'height', 'visible', 'color',
+                         'opacity', 'zoom', 'navigation')
 
     def __init__(self, args, var_name=None):
         self.geo_field = template.Variable(args[1])
         self.var_name = var_name
-        self.options = {}
-        if len(args) > 2:
-            # Eating empty options, u''
-            options = [o for o in ''.join(args[2:]).split(',') if o]
-            for o in options:
-                key, value = o.split('=')
-                available = ('width', 'height', 'visible', 'color',
-                             'opacity', 'zoom', 'navigation')
-                if not key in available:
-                    raise template.TemplateSyntaxError('"%s" option is not su'
-                            'pported. Available options are: %s' % (key,
-                            ', '.join(available)))
-                self.options[key] = SafeVariable(value)
+        self.parse_options(args)
 
     def render(self, context):
         # Generate a probably unique name for javascript variables -- in case
@@ -58,7 +75,6 @@ class MapNode(template.Node):
         else:
             collection_type = 'None'
 
-        # Resolving the options
         for (key, value) in self.options.items():
             self.options[key] = value.resolve(context)
 
@@ -77,7 +93,6 @@ class MapNode(template.Node):
 
         self.check_booleans()
 
-        # Completely isolated context
         isolated_context = template.Context({
             'options': self.options,
             'api_key': settings.GEOPORTAL_API_KEY,
@@ -102,13 +117,6 @@ class MapNode(template.Node):
         if self.var_name is not None:
             context[self.var_name] = map_var
         return rendered
-
-    def to_boolean(self, var_name):
-        try:
-            self.options[var_name] = bool(int(self.options[var_name]))
-        except ValueError:
-            raise template.TemplateSyntaxError('"%s" can be either 0 or 1 (was'
-                ': "%s")' % (var_name, self.options[var_name]))
 
     def check_booleans(self):
         if not 'visible' in self.options:
@@ -150,3 +158,95 @@ def geoportal_map(parser, token):
 def geoportal_js():
     return mark_safe('<script type="text/javascript" src=' + \
                      '"%sGeoportalExtended.js"></script>' % utils.MEDIA_URL)
+
+
+class GmlNode(OptionsNode):
+    args = 3
+    available_options = ('color', 'opacity', 'width', 'extract')
+    format_type = None
+    force_style = False
+
+    def __init__(self, args):
+        self.map_var = template.Variable(args[1])
+        self.kml_url = SafeVariable(args[2])
+        self.parse_options(args)
+
+    def render(self, context):
+        for key, value in self.options.items():
+            self.options[key] = value.resolve(context)
+
+        if self.force_style:
+            self.options['extract'] = True
+            self.options['style'] = True
+        else:
+            if 'extract' in self.options:
+                self.to_boolean('extract')
+            else:
+                self.options['extract'] = True
+
+            for key in ('width', 'opacity', 'color'):
+                # Setting any of those disables style extraction
+                if key in self.options:
+                    self.options['extract'] = False
+                    break
+
+        if not 'width' in self.options:
+            self.options['width'] = 2
+
+        if not 'opacity' in self.options:
+            if self.format_type == 'gpx':
+                self.options['opacity'] = 1
+            else:
+                self.options['opacity'] = utils.DEFAULT_OPACITY
+
+        if not 'color' in self.options:
+            self.options['color'] = utils.DEFAULT_COLOR
+
+        self.options['url'] = self.kml_url.resolve(context)
+        self.options['map_var'] = self.map_var.resolve(context)
+        self.options['format'] = self.format_type
+        return template.loader.render_to_string('geoportal/gml.html',
+                                                self.options)
+
+
+class KmlNode(GmlNode):
+    format_type = 'kml'
+
+
+@register.tag
+def geoportal_kml(parser, token):
+    """Adds a layer to an existing map from a KML file
+    {% geoportal_kml map_var kml_url color=..., width=..., opacity=... %}
+
+    Options all have default values:
+        color: utils.DEFAULT_COLOR
+        width: 2
+        opacity: utils.DEFAULT_OPACITY
+        extract: 1
+    """
+    bits = token.split_contents()
+    if len(bits) < 3:
+        raise template.TemplateSyntaxError('geoportal_kml takes at least two '
+                                           'arguments')
+    return KmlNode(bits)
+
+
+class GpxNode(GmlNode):
+    format_type = 'gpx'
+    force_style = True
+    available_options = ('color', 'opacity', 'width')
+
+
+@register.tag
+def geoportal_gpx(parser, token):
+    """Same as KML, renders a GPX file.
+    Options (defaut value):
+        width: width of the feature (2)
+        opacity: stroke opacity (1)
+        color: feature color (utils.DEFAULT_COLOR)
+    """
+    bits = token.split_contents()
+    if len(bits) < 3:
+        raise template.TemplateSyntaxError('geoportal_gpx takes at least two '
+                                           'arguments')
+    return GpxNode(bits)

@@ -1,5 +1,12 @@
+2010-05-09 Bruno Renil <bruno@renie.fr>
+
+    * Added KML and GPX rendering to the template library
+    * Tests passes with Django 1.2
+
 2010-05-08 Bruno Renié <bruno@renie.fr>
 
+    * Zooming to the correct bounds when features are set to 'invisible'
+    * Fixed the 'as map_var' behaviour in the templates
     * Added transitionEffect: 'resize' to all widgets for better UX
     * Fixed setup.py again
     * Removed hardcoded SRID in the admin widget
