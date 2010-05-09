@@ -20,7 +20,7 @@ There are two ways to enable this library:
 * **On a per-template basis**: simply add this line on the top of the template
   where you need geoportal's template tags:
 
-  .. code-block:: jinja
+  .. code-block:: html+django
 
       {% load geoportal_tags %}
 
@@ -33,7 +33,7 @@ Once you've loaded the template library, you need to load the geoportal
 javascript library on each page that displays a map. This is achieved by
 adding the following in the ``head`` section of your template:
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_js %}
 
@@ -46,7 +46,7 @@ Rendering a map: the {% geoportal_map %} template tag
 
 Syntax:
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_map field [option1=value, option2=other_value] [as var_name] %}
 
@@ -61,7 +61,7 @@ a polygon or even a set of polygons or any type of geographic field. The
 simplest way to display a geographic field is (assuming you have a
 ``model_instance`` variable in your template context):
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_map model_instance.geo_field %}
 
@@ -84,7 +84,7 @@ generated and this variable stores the map's information. If you need to do
 some further customization, you can get this variable in your template
 context:
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_map geo_field as var_name %}
 
@@ -133,14 +133,14 @@ comma. Some whitespace can be added since it often improves readability.
 Here is an example of rendering a map with ``option1`` set to ``1`` and
 ``option2`` set to ``ff0000``:
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_map model_instance.geo_field option1=1, option2=ff0000 %}
 
 Option values can be static strings or template variables. If ``some_value``
 is available in the template context, calling
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_map model_instance.geo_field option1=some_value %}
 
@@ -189,7 +189,7 @@ Final example
 
 Let's finish with an example:
 
-.. code-block:: jinja
+.. code-block:: html+django
 
     {% geoportal_map model_instance.point color=ff0000, opacity=0.7, zoom=14, width=300, height=300 %}
 
