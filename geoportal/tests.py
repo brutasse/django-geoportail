@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from django.template import Template, TemplateSyntaxError
+from django.template import Template, TemplateSyntaxError, Context
 from django.test import TestCase
 
 import geoportal
@@ -61,12 +61,12 @@ class GeoTemplateTest(TestCase):
         pass
 
     def test_simple_template(self):
-        context = {'geo_field': self.geo_model.point}
+        context = Context({'geo_field': self.geo_model.point})
         rendered = Template(BASE_TEMPLATE % '').render(context)
         self.assertTrue(str(self.geo_model.point) in rendered)
 
     def test_template_with_options(self):
-        context = {'geo_field': self.geo_model.line}
+        context = Context({'geo_field': self.geo_model.line})
         tmpl = Template(BASE_TEMPLATE % 'width=120, height=150')
         self.assertTrue(str(self.geo_model.line) in tmpl.render(context))
 
@@ -75,30 +75,29 @@ class GeoTemplateTest(TestCase):
                 lambda: Template(BASE_TEMPLATE % 'some_option=some_value'))
 
     def test_template_with_variable(self):
-        context = {'geo_field': self.geo_model.polygon,
-                   'map_width': 200,
-                   'map_height': 400}
+        context = Context({'geo_field': self.geo_model.polygon,
+                           'map_width': 200,
+                           'map_height': 400})
         template_str = BASE_TEMPLATE % 'width=map_width, height=map_height'
         rendered = Template(template_str).render(context)
         self.assertTrue('width: 200px; height: 400px;' in rendered)
         self.assertTrue(str(self.geo_model.polygon) in rendered)
 
     def test_invisible_feature(self):
-        context = {'geo_field': self.geo_model.polygon}
+        context = Context({'geo_field': self.geo_model.polygon})
         rendered = Template(BASE_TEMPLATE % 'visible=0').render(context)
-        # This is the line that adds the feature to the map
-        # (should not be here)
-        self.assertFalse('.viewer.map.addLayer(' in rendered)
+        # This is the line that sets the feature as invisible
+        self.assertTrue('visibility: false' in rendered)
 
     def test_as_var_name(self):
-        context = {'geo_field': self.geo_model.polygon}
+        context = Context({'geo_field': self.geo_model.polygon})
         rendered = Template(BASE_TEMPLATE % 'as some_variable').render(context)
 
-        # This is a 5-char random string
-        self.assertEquals(len(context['some_variable']), 5)
+        # This is 'map_' +  a 5-char random string
+        self.assertEquals(len(context['some_variable']), 9)
 
     def test_javascript_tag(self):
-        rendered = Template(JS_TEMPLATE).render({})
+        rendered = Template(JS_TEMPLATE).render(Context({}))
         self.assertTrue('<script type="text/javascript" src="' in rendered)
 
 
