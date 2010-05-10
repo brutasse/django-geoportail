@@ -1,4 +1,4 @@
-2010-05-09 Bruno Renil <bruno@renie.fr>
+2010-05-09 Bruno Renié <bruno@renie.fr>
 
     * Added KML and GPX rendering to the template library
     * Tests passes with Django 1.2
