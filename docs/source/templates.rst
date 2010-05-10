@@ -236,6 +236,9 @@ Options are comma-separated, using the key=value syntax described in the
 ``geoportal_map`` section. The values can be raw strings or template
 variables. The available options are:
 
+* ``focus``: a boolean specifying whether to focus the map on the newly added
+  feature or not. Default: 1 (true).
+
 * ``width``: the width of the border of the feature. Default: 2.
 
 * ``opacity``: the opacity of the innner part of the ferature. Default: 0.4 or
@@ -272,6 +275,9 @@ the URL of the GPX file.
 
 The available options are:
 
+* ``focus``: a boolean specifying whether to focus the map on the newly added
+  feature or not. Default: 1 (true).
+
 * ``color``: the color of the GPX feature. Default: OpenLayers's default or
   the value of ``GEOPORTAL_DEFAULT_COLOR``.
 
@@ -279,3 +285,9 @@ The available options are:
   the ``opacity`` parameter of the KML tag. Default: 1.
 
 * ``width``: the width of the stroke, in pixels. Default: 2.
+
+.. note:: On focus
+
+    If you add several KML/GPX features to the map, make sure the ``focus``
+    parameter is set to 1 only once. If not, the map rendering can become
+    unpredictable.

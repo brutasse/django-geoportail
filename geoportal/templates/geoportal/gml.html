@@ -1,26 +1,39 @@
 <script type="text/javascript">
-	var extract = {{ extract|yesno:"true,false" }};
+	var {{ format }} = {}
+	{{ format }}.extract = {{ extract|yesno:"true,false" }};
 	{% ifequal format 'kml' %}
-	var format = new OpenLayers.Format.KML({
-		extractStyles: extract,
-		extractAttributes: extract,
+	{{ format }}.format = new OpenLayers.Format.KML({
+		extractStyles: {{ format }}.extract,
+		extractAttributes: {{ format }}.extract,
 		maxDepth: 2
 	});
 	{% endifequal %}{% ifequal format 'gpx' %}
-	var format = new OpenLayers.Format.GPX({
-		extractWaypoints: extract,
-		extractTracks: extract,
-		extractRoutes: extract,
-		extractAttributes: extract
+	{{ format }}.format = new OpenLayers.Format.GPX({
+		extractWaypoints: {{ format }}.extract,
+		extractTracks: {{ format }}.extract,
+		extractRoutes: {{ format }}.extract,
+		extractAttributes: {{ format }}.extract
 	});{% endifequal %}
 
-	var protocol = new OpenLayers.Protocol.HTTP({
+	{{ format }}.parseFeatures = function(request) {
+		features = {{ format }}.format.read(request.priv.responseText);
+		bounds = new OpenLayers.Bounds();
+		for (var feat in features) {
+			bounds.extend(features[feat].geometry.getBounds());
+		}
+		bounds.transform(new OpenLayers.Projection('EPSG:4326'), {{ map_var }}.viewer.map.getProjection());{% if focus %}
+		{{ map_var }}.viewer.map.zoomToExtent(bounds);{% endif %}
+	}
+
+	{{ format }}.protocol = new OpenLayers.Protocol.HTTP({
 		url: '{{ url }}',
-		format: format,
+		format: {{ format }}.format,
+		callback: {{ format }}.parseFeatures,
 	});
+	{{ format }}.protocol.read();{# doing this explicitly triggers the callback #}
 
 	{% if style or not extract %}
-	var styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
+	{{ format }}.styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
 			fillColor: '#{{ color }}',
 			strokeColor: '#{{ color }}',
 			fillOpacity: {{ opacity }},
@@ -31,13 +44,13 @@
 	);{% endif %}
 
 	{% with format|upper as type %}
-	var {{ format }} = new OpenLayers.Layer.Vector('{{ type }}', {
+	{{ format }}.vector = new OpenLayers.Layer.Vector('{{ type }}', {
 		projection: new OpenLayers.Projection('EPSG:4326'),
 		strategies: [new OpenLayers.Strategy.Fixed()],
-		protocol: protocol,{% if style or not extract %}
-		styleMap: styleMap{% endif %}
+		protocol: {{ format }}.protocol,{% if style or not extract %}
+		styleMap: {{ format }}.styleMap{% endif %}
 	});
 	{% endwith %}
 
-	{{ map_var }}.viewer.map.addLayer({{ format }});
+	{{ map_var }}.viewer.map.addLayer({{ format }}.vector);
 </script>

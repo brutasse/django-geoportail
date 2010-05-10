@@ -1,4 +1,12 @@
-2010-05-09 Bruno Renié <bruno@renie.fr>
+2010-05-11 Bruno Renié <bruno@renie.fr>
+
+    * KML and GPX inclusion got an autofocus parameter.
+
+2010-05-10 Bruno Renié <bruno@renie.fr> -- 0.4.1
+
+    * docs are included in the package data
+
+2010-05-09 Bruno Renié <bruno@renie.fr> -- 0.4
 
     * Added KML and GPX rendering to the template library
     * Tests passes with Django 1.2

@@ -121,24 +121,34 @@ class GeoTemplateTest(TestCase):
     def test_kml(self):
         context = Context({'geo_field': self.geo_model.polygon})
         rendered = Template(KML_TEMPLATE % '/kml_url.kml').render(context)
-        self.assertTrue('var extract = true;' in rendered)
+        self.assertTrue('kml.extract = true;' in rendered)
         self.assertTrue('new OpenLayers.Format.KML' in rendered)
         self.assertTrue("url: '/kml_url.kml'," in rendered)
+        self.assertTrue("viewer.map.zoomToExtent(bounds);" in rendered)
 
         tmpl = Template(KML_TEMPLATE % '/kml_url.kml width=5')
         rendered = tmpl.render(context)
-        self.assertTrue('var extract = false;' in rendered)
+        self.assertTrue('kml.extract = false;' in rendered)
+
+        tmpl = Template(KML_TEMPLATE % '/kml_url.kml focus=0')
+        rendered = tmpl.render(context)
+        self.assertFalse("viewer.map.zoomToExtent(bounds);" in rendered)
 
     def test_gpx(self):
         context = Context({'geo_field': self.geo_model.polygon})
         rendered = Template(GPX_TEMPLATE % '/gpx_url.gpx').render(context)
-        self.assertTrue('var extract = true;' in rendered)
+        self.assertTrue('gpx.extract = true;' in rendered)
         self.assertTrue('new OpenLayers.Format.GPX' in rendered)
         self.assertTrue("url: '/gpx_url.gpx'," in rendered)
+        self.assertTrue("viewer.map.zoomToExtent(bounds);" in rendered)
 
         tmpl = Template(GPX_TEMPLATE % '/gpx_url.gpx opacity=0.7')
         rendered = tmpl.render(context)
-        self.assertTrue('var extract = true;' in rendered)
+        self.assertTrue('gpx.extract = true;' in rendered)
+
+        tmpl = Template(GPX_TEMPLATE % '/gpx_url.gpx focus=0')
+        rendered = tmpl.render(context)
+        self.assertFalse("viewer.map.zoomToExtent(bounds);" in rendered)
 
 
 class TestForm(geoportal.forms.Form):

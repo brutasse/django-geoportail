@@ -162,7 +162,7 @@ def geoportal_js():
 
 class GmlNode(OptionsNode):
     args = 3
-    available_options = ('color', 'opacity', 'width', 'extract')
+    available_options = ('color', 'opacity', 'width', 'extract', 'focus')
     format_type = None
     force_style = False
 
@@ -202,6 +202,11 @@ class GmlNode(OptionsNode):
         if not 'color' in self.options:
             self.options['color'] = utils.DEFAULT_COLOR
 
+        if 'focus' in self.options:
+            self.to_boolean('focus')
+        else:
+            self.options['focus'] = True
+
         self.options['url'] = self.kml_url.resolve(context)
         self.options['map_var'] = self.map_var.resolve(context)
         self.options['format'] = self.format_type
@@ -234,7 +239,7 @@ def geoportal_kml(parser, token):
 class GpxNode(GmlNode):
     format_type = 'gpx'
     force_style = True
-    available_options = ('color', 'opacity', 'width')
+    available_options = ('color', 'opacity', 'width', 'focus')
 
 
 @register.tag
