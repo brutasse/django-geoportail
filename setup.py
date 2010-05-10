@@ -10,10 +10,10 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     url='http://bitbucket.org/bruno/django-geoportail',
-    license='BSD licence, see LICENCE.txt',
+    license='BSD licence, see LICENCE file',
     description='Add maps and photos from the French National Geographic' + \
                 ' Institute to GeoDjango',
-    long_description=open('README.txt').read(),
+    long_description=open('README').read(),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
