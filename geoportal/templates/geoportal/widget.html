@@ -29,7 +29,7 @@
 		else { {{ map_var }}.num_geom = 1;}
 		var feat2 = feat.clone();
 		var feat_epsg = new OpenLayers.Feature.Vector(feat2.geometry.transform({{ map_var }}.viewer.map.getProjection(), new OpenLayers.Projection('EPSG:{{ srid }}')));
-		document.getElementById('{{ map_var }}').value = {{ map_var }}.get_ewkt(feat_epsg);
+		document.getElementById('{{ field_name }}').value = {{ map_var }}.get_ewkt(feat_epsg);
 	}
 
 	{{ map_var }}.add_wkt = function(event){
@@ -73,7 +73,7 @@
 
 	{{ map_var }}.clearFeatures = function (){
 		{{ map_var }}.deleteFeatures();
-		document.getElementById('{{ map_var }}').value = '';
+		document.getElementById('{{ field_name }}').value = '';
 		var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
 		center = center.transform(new OpenLayers.Projection('EPSG:{{ srid }}'), {{ map_var }}.viewer.map.getProjection());
 		{{ map_var }}.viewer.map.setCenter(center, {{ default_zoom }});
@@ -143,7 +143,7 @@
 		{{ map_var }}.layers.vector = new OpenLayers.Layer.Vector("{{ field_name }}", {styleMap: styleMap});
 		{{ map_var }}.viewer.map.addLayer({{ map_var }}.layers.vector);
 
-		var wkt = document.getElementById('{{ map_var }}').value;
+		var wkt = document.getElementById('{{ field_name }}').value;
 		if (wkt) {
 			var geom = {{ map_var }}.read_wkt(wkt);
 			{{ map_var }}.write_wkt(geom);
@@ -185,7 +185,7 @@
 
 <a href="javascript:{{ map_var }}.clearFeatures()">Delete all Features</a>
 
-<textarea id="{{ map_var }}" class="vWKTField required" cols="150" rows="10" name="{{ map_var }}" style="display:none;">{{ wkt }}</textarea>
+<textarea id="{{ field_name }}" class="vWKTField required" cols="150" rows="10" name="{{ field_name }}" style="display:none;">{{ wkt }}</textarea>
 
 <script type="text/javascript">
 	{{ map_var }}.init();
@@ -201,4 +201,5 @@
 		background-image: url("{{ admin_media_url }}img/gis/move_vertex_off.png");
 		background-repeat: no-repeat;
 	}
+	.gpMainMap a { font-size: 0.7em; }
 </style>

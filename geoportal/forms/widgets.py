@@ -33,7 +33,7 @@ class BaseWidget(forms.Textarea):
             value = ''
 
         context = {
-            'map_var': name,
+            'map_var': 'map_' + name,
             'is_polygon': self.is_polygon,
             'is_linestring': self.is_linestring,
             'is_point': self.is_point,

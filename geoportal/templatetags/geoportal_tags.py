@@ -54,9 +54,10 @@ class MapNode(OptionsNode):
     def __init__(self, args, var_name=None):
         self.geo_field = template.Variable(args[1])
         self.var_name = var_name
-        self.parse_options(args)
+        self.args_ = args
 
     def render(self, context):
+        self.parse_options(self.args_)
         # Generate a probably unique name for javascript variables -- in case
         # there are several maps on a page
         map_var = ''.join(random.sample('abcdefghijklmopqrstuvwxyz', 5))
