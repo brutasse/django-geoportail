@@ -84,13 +84,13 @@ class GeoTemplateTest(TestCase):
 
     def test_invalid_template(self):
         self.assertRaises(TemplateSyntaxError,
-                lambda: Template(BASE_TEMPLATE % 'some_option=some_value'))
+                lambda: Template(BASE_TEMPLATE % 'some_option=some_value').render(Context()))
 
         self.assertRaises(TemplateSyntaxError,
-                lambda: Template(KML_TEMPLATE % ''))
+                lambda: Template(KML_TEMPLATE % '').render(Context()))
 
         self.assertRaises(TemplateSyntaxError,
-                lambda: Template(GPX_TEMPLATE % ''))
+                lambda: Template(GPX_TEMPLATE % '').render(Context()))
 
     def test_template_with_variable(self):
         context = Context({'geo_field': self.geo_model.polygon,
