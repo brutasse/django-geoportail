@@ -44,6 +44,6 @@ def get_layers(layers):
             'switcher_name': key.capitalize(),
             'name': LAYERS[key],
             'resource_name': LAYERS[key].split(':')[0],
-            'opacity': value,
+            'opacity': str(value),
         })
     return lyrs
