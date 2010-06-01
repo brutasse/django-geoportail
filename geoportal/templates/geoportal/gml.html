@@ -53,4 +53,37 @@
 	{% endwith %}
 
 	{{ map_var }}.viewer.map.addLayer({{ format }}.vector);
+
+	{% if popup %}
+	{{ map_var }}.initPopup = function() {
+		{{ map_var }}.selectControl = new OpenLayers.Control.SelectFeature({{ map_var }}.viewer.map.layers[{{ map_var }}.viewer.map.layers.length - 1],
+				{onSelect: {{ map_var }}.onFeatureSelect, onUnselect: {{ map_var }}.onFeatureUnselect}
+		);
+		{{ map_var }}.viewer.map.addControl({{ map_var }}.selectControl);
+		{{ map_var }}.selectControl.activate();
+	}
+
+	{{ map_var }}.onPopupClose = function(event) {
+	 {{ map_var }}.selectControl.unselect({{ map_var }}.selectedFeature);
+	}
+
+	{{ map_var }}.onFeatureSelect = function(feature) {
+		{{ map_var }}.selectedFeature = feature;
+		console.log(feature);
+		popup = new OpenLayers.Popup.FramedCloud("chicken",
+				feature.geometry.getBounds().getCenterLonLat(),
+				new OpenLayers.Size(100, 100),
+				feature.attributes.desc{% ifequal format 'kml' %}ription{% endifequal %},
+				null, true, {{ map_var }}.onPopupClose);
+		feature.popup = popup;
+		{{ map_var }}.viewer.map.addPopup(popup);
+	}
+
+	{{ map_var }}.onFeatureUnselect = function(feature) {
+		{{ map_var }}.viewer.map.removePopup(feature.popup);
+		feature.popup.destroy();
+		feature.popup = null;
+	}
+	{{ map_var }}.initPopup();
+	{% endif %}
 </script>

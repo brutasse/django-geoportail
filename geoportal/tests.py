@@ -125,6 +125,7 @@ class GeoTemplateTest(TestCase):
         self.assertTrue('new OpenLayers.Format.KML' in rendered)
         self.assertTrue("url: '/kml_url.kml'," in rendered)
         self.assertTrue("viewer.map.zoomToExtent(bounds);" in rendered)
+        self.assertTrue("new OpenLayers.Popup.FramedCloud" in rendered)
 
         tmpl = Template(KML_TEMPLATE % '/kml_url.kml width=5')
         rendered = tmpl.render(context)
@@ -134,6 +135,10 @@ class GeoTemplateTest(TestCase):
         rendered = tmpl.render(context)
         self.assertFalse("viewer.map.zoomToExtent(bounds);" in rendered)
 
+        tmpl = Template(KML_TEMPLATE % '/kml_url.kml popup=0')
+        rendered = tmpl.render(context)
+        self.assertFalse("new OpenLayers.Popup.FramedCloud" in rendered)
+
     def test_gpx(self):
         context = Context({'geo_field': self.geo_model.polygon})
         rendered = Template(GPX_TEMPLATE % '/gpx_url.gpx').render(context)
@@ -141,6 +146,7 @@ class GeoTemplateTest(TestCase):
         self.assertTrue('new OpenLayers.Format.GPX' in rendered)
         self.assertTrue("url: '/gpx_url.gpx'," in rendered)
         self.assertTrue("viewer.map.zoomToExtent(bounds);" in rendered)
+        self.assertTrue("new OpenLayers.Popup.FramedCloud" in rendered)
 
         tmpl = Template(GPX_TEMPLATE % '/gpx_url.gpx opacity=0.7')
         rendered = tmpl.render(context)
@@ -150,6 +156,9 @@ class GeoTemplateTest(TestCase):
         rendered = tmpl.render(context)
         self.assertFalse("viewer.map.zoomToExtent(bounds);" in rendered)
 
+        tmpl = Template(GPX_TEMPLATE % '/gpx_url.gpx popup=0')
+        rendered = tmpl.render(context)
+        self.assertFalse("new OpenLayers.Popup.FramedCloud" in rendered)
 
 class TestForm(geoportal.forms.Form):
     name = geoportal.forms.CharField(max_length=255)

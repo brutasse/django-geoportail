@@ -247,6 +247,11 @@ variables. The available options are:
 * ``color``: the color of the feature. Default: OpenLayers' default, or the
   value of ``GEOPORTAL_DEFAULT_COLOR`` if you've overriden it.
 
+* ``popup``: a boolean specifying whether to show a popup or not when the user
+  clicks on a feature: if the features of the KML file contain some
+  ``<description>`` elements, a popup with the description is displayed when
+  the user clicks on the feature. Default: 1 (true).
+
 * ``extract``: a boolean specifying whether the KML attributes and styles
   should be extracted from the feature. Default is 1 (true), you may want to
   switch it off for better performance if you render a lot (hundreds) of
@@ -285,6 +290,11 @@ The available options are:
   the ``opacity`` parameter of the KML tag. Default: 1.
 
 * ``width``: the width of the stroke, in pixels. Default: 2.
+
+* ``popup``: a boolean specifying whether to show a popup or not when the user
+  clicks on a feature: if the features of the GPX file contain some ``<desc>``
+  elements, a popup with the description is displayed when the user clicks on
+  the feature. Default: 1 (true).
 
 .. note:: On focus
 
