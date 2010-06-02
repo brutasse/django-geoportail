@@ -74,7 +74,7 @@
 	{{ map_var }}.clearFeatures = function (){
 		{{ map_var }}.deleteFeatures();
 		document.getElementById('{{ field_name }}').value = '';
-		var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
+		var center = new OpenLayers.LonLat({{ default_lon|escapejs }}, {{ default_lat|escapejs }});
 		center = center.transform(new OpenLayers.Projection('EPSG:{{ srid }}'), {{ map_var }}.viewer.map.getProjection());
 		{{ map_var }}.viewer.map.setCenter(center, {{ default_zoom }});
 	}
@@ -136,7 +136,7 @@
 		{% endfor %}
 		var styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
 				fillColor: "#{{ color }}",
-				fillOpacity: {{ opacity }},
+				fillOpacity: {{ opacity|escapejs }},
 				{% if is_linestring %}strokeWidth: 3,{% endif %}
 				strokeColor: '#{{ color }}'},
 			OpenLayers.Feature.Vector.style["default"]))
@@ -162,7 +162,7 @@
 				{{ map_var }}.viewer.map.zoomTo({{ point_zoom }});
 			}
 		} else {
-			var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
+			var center = new OpenLayers.LonLat({{ default_lon|escapejs }}, {{ default_lat|escapejs }});
 			center = center.transform(new OpenLayers.Projection('EPSG:{{ srid }}'), {{ map_var }}.viewer.map.getProjection());
 			{{ map_var }}.viewer.map.setCenter(center, {{ default_zoom }});
 		}

@@ -1,3 +1,7 @@
+2010-06-02 Bruno Renié <bruno@renie.fr>
+
+    * #3 - Various things no longer break with French installations
+
 2010-06-01 Bruno Renié <bruno@renie.fr> -- 0.4.3
 
     * #2 - Popups are enabled by default on KML and GPX insertion.

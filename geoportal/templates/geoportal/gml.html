@@ -36,8 +36,8 @@
 	{{ format }}.styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
 			fillColor: '#{{ color }}',
 			strokeColor: '#{{ color }}',
-			fillOpacity: {{ opacity }},
-			{% if style %}strokeOpacity: {{ opacity }},{% endif %}
+			fillOpacity: {{ opacity|escapejs }},
+			{% if style %}strokeOpacity: {{ opacity|escapejs }},{% endif %}
 			strokeWidth: {{ width }},
 		},
 		OpenLayers.Feature.Vector.style['default'])

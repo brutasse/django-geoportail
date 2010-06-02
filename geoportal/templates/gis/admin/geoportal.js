@@ -73,12 +73,12 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
 {{ module }}.clearFeatures = function (){
   {{ module }}.deleteFeatures();
   document.getElementById('{{ id }}').value = '';
-  var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
+  var center = new OpenLayers.LonLat({{ default_lon|escapejs }}, {{ default_lat|escapejs }});
   center = center.transform(new OpenLayers.Projection('EPSG:{{ srid }}'), {{ module }}.map.getProjection());
   {{ module }}.map.setCenter(center, {{ default_zoom }});
 }
 // Add Select control
-{{ module }}.addSelectControl = function(){   
+{{ module }}.addSelectControl = function(){
   var select = new OpenLayers.Control.SelectFeature({{ module }}.layers.vector, {'toggle' : true, 'clickout' : true});
   viewer_{{ id }}.map.addControl(select);
   select.activate();
@@ -128,7 +128,7 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1, transitionEffect: 'resize'});
     {% endfor %}{{ module }}.map = viewer_{{ id }}.map;
     {% if is_linestring %}OpenLayers.Feature.Vector.style["default"]["strokeWidth"] = 3; // Default too thin for linestrings. {% endif %}
-    OpenLayers.Feature.Vector.style["default"]["fillOpacity"] = {{ feature_opacity }};
+    OpenLayers.Feature.Vector.style["default"]["fillOpacity"] = {{ feature_opacity|escapejs }};
     OpenLayers.Feature.Vector.style["default"]["strokeColor"] = "#{{ feature_color }}";
     OpenLayers.Feature.Vector.style["default"]["fillColor"] = "#{{ feature_color }}";
     {{ module }}.layers.vector = new OpenLayers.Layer.Vector(" {{ field_name }}");
@@ -157,7 +157,7 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
           {{ module }}.map.zoomTo({{ point_zoom }}); 
       }
     } else {
-      var center = new OpenLayers.LonLat({{ default_lon }}, {{ default_lat }});
+      var center = new OpenLayers.LonLat({{ default_lon|escapejs }}, {{ default_lat|escapejs }});
       center = center.transform(new OpenLayers.Projection('EPSG:{{ srid }}'), {{ module }}.map.getProjection());
       {{ module }}.map.setCenter(center, {{ default_zoom }});
     }

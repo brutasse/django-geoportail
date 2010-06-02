@@ -160,6 +160,7 @@ class GeoTemplateTest(TestCase):
         rendered = tmpl.render(context)
         self.assertFalse("new OpenLayers.Popup.FramedCloud" in rendered)
 
+
 class TestForm(geoportal.forms.Form):
     name = geoportal.forms.CharField(max_length=255)
     point = geoportal.forms.PointField()
