@@ -1,7 +1,7 @@
 Welcome to Django-geoportail's documentation!
 =============================================
 
-.. image:: img/geoportal.png
+.. figure:: img/geoportal.png
    :align: right
 
 `Géoportail`_ is a web portal managed by the French National Geographic
@@ -10,7 +10,7 @@ territories, as well as several sets of geolocalized data.
 
 .. _Géoportail: http://www.geoportail.fr/
 
-.. image:: img/example.png
+.. figure:: img/example.png
    :align: right
 
 They also provide a `javascript API`_ based on `OpenLayers`_, which can be
