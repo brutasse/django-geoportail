@@ -91,6 +91,7 @@ class MapNode(OptionsNode):
 
         if not 'opacity' in self.options:
             self.options['opacity'] = utils.DEFAULT_OPACITY
+        self.options['opacity'] = str(self.options['opacity'])
 
         self.check_booleans()
 
@@ -200,6 +201,7 @@ class GmlNode(OptionsNode):
                 self.options['opacity'] = 1
             else:
                 self.options['opacity'] = utils.DEFAULT_OPACITY
+        self.options['opacity'] = str(self.options['opacity'])
 
         if not 'color' in self.options:
             self.options['color'] = utils.DEFAULT_COLOR

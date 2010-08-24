@@ -56,7 +56,7 @@
 		{% endfor %}
 		var styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
 				fillColor: "#{{ options.color }}",
-				fillOpacity: {{ options.opacity|escapejs }},
+				fillOpacity: {{ options.opacity }},
 				{% if is_linestring %}strokeWidth: 3,{% endif %}
 				strokeColor: '#{{ options.color }}'},
 			OpenLayers.Feature.Vector.style["default"]))

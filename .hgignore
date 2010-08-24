@@ -4,3 +4,4 @@ build
 .swp
 dist
 media
+django_geoportail.egg-info
