@@ -69,7 +69,6 @@
 
 	{{ map_var }}.onFeatureSelect = function(feature) {
 		{{ map_var }}.selectedFeature = feature;
-		console.log(feature);
 		popup = new OpenLayers.Popup.FramedCloud("chicken",
 				feature.geometry.getBounds().getCenterLonLat(),
 				new OpenLayers.Size(100, 100),

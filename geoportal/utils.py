@@ -1,15 +1,14 @@
 from django.conf import settings
 
-POINT_ZOOM = getattr(settings, 'GEOPORTAL_POINT_ZOOM', 14)
-DEFAULT_LON = getattr(settings, 'GEOPORTAL_DEFAULT_LON', 2)
-DEFAULT_LAT = getattr(settings, 'GEOPORTAL_DEFAULT_LAT', 47)
-DEFAULT_ZOOM = getattr(settings, 'GEOPORTAL_DEFAULT_ZOOM', 5)
-DEFAULT_WIDTH = getattr(settings, 'GEOPORTAL_DEFAULT_WIDTH', 600)
-DEFAULT_HEIGHT = getattr(settings, 'GEOPORTAL_DEFAULT_HEIGHT', 400)
-DEFAULT_COLOR = getattr(settings, 'GEOPORTAL_DEFAULT_COLOR', 'ee9900')
-DEFAULT_OPACITY = getattr(settings, 'GEOPORTAL_DEFAULT_OPACITY', 0.4)
-MEDIA_URL = getattr(settings, 'GEOPORTAL_MEDIA_URL',
-                              'http://api.ign.fr/geoportail/api/js/1.1/')
+POINT_ZOOM = 14
+DEFAULT_LON = 2
+DEFAULT_LAT = 47
+DEFAULT_ZOOM = 5
+DEFAULT_WIDTH = 600
+DEFAULT_HEIGHT = 400
+DEFAULT_COLOR = 'ee9900'
+DEFAULT_OPACITY = 0.4
+MEDIA_URL = 'http://api.ign.fr/geoportail/api/js/1.1/'
 
 LAYERS = {
     # See https://api.ign.fr/geoportail/api/doc/fr/webmaster/layers.html

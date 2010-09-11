@@ -81,16 +81,24 @@ class MapNode(OptionsNode):
 
         # Default options
         if not 'width' in self.options:
-            self.options['width'] = utils.DEFAULT_WIDTH
+            self.options['width'] = getattr(settings,
+                                            'GEOPORTAL_DEFAULT_WIDTH',
+                                            utils.DEFAULT_WIDTH)
 
         if not 'height' in self.options:
-            self.options['height'] = utils.DEFAULT_HEIGHT
+            self.options['height'] = getattr(settings,
+                                             'GEOPORTAL_DEFAULT_HEIGHT',
+                                             utils.DEFAULT_HEIGHT)
 
         if not 'color' in self.options:
-            self.options['color'] = utils.DEFAULT_COLOR
+            self.options['color'] = getattr(settings,
+                                            'GEOPORTAL_DEFAULT_COLOR',
+                                            utils.DEFAULT_COLOR)
 
         if not 'opacity' in self.options:
-            self.options['opacity'] = utils.DEFAULT_OPACITY
+            self.options['opacity'] = getattr(settings,
+                                              'GEOPORTAL_DEFAULT_OPACITY',
+                                              utils.DEFAULT_OPACITY)
         self.options['opacity'] = str(self.options['opacity'])
 
         self.check_booleans()
@@ -105,10 +113,14 @@ class MapNode(OptionsNode):
             'is_collection': is_collection,
             'collection_type': collection_type,
             'layers': utils.get_layers((('maps', 1),)),
-            'default_lon': utils.DEFAULT_LON,
-            'default_lat': utils.DEFAULT_LAT,
-            'default_zoom': utils.DEFAULT_ZOOM,
-            'point_zoom': utils.POINT_ZOOM,
+            'default_lon': getattr(settings, 'GEOPORTAL_DEFAULT_LON',
+                                   utils.DEFAULT_LON),
+            'default_lat': getattr(settings, 'GEOPORTAL_DEFAULT_LAT',
+                                   utils.DEFAULT_LAT),
+            'default_zoom': getattr(settings, 'GEOPORTAL_DEFAULT_ZOOM',
+                                    utils.DEFAULT_ZOOM),
+            'point_zoom': getattr(settings, 'GEOPORTAL_POINT_ZOOM',
+                                  utils.POINT_ZOOM),
             'srid': 4326,
             'field_name': ftype.capitalize(),
             'wkt': geo_field.wkt,
@@ -158,8 +170,9 @@ def geoportal_map(parser, token):
 
 @register.simple_tag
 def geoportal_js():
+    media_url = getattr(settings, 'GEOPORTAL_MEDIA_URL', utils.MEDIA_URL)
     return mark_safe('<script type="text/javascript" src=' + \
-                     '"%sGeoportalExtended.js"></script>' % utils.MEDIA_URL)
+                     '"%sGeoportalExtended.js"></script>' % media_url)
 
 
 class GmlNode(OptionsNode):

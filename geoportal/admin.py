@@ -3,12 +3,6 @@ from django.conf import settings
 
 from geoportal import utils
 
-if not hasattr(settings, 'GEOPORTAL_API_KEY'):
-    # Just raising a warning, it's not fatal after all
-    import warnings
-    warnings.warn("GEOPORTAL_API_KEY could not be found in your settings. "
-                  "It is necessary to get maps to work.")
-
 
 class GeoPortalAdmin(GeoModelAdmin):
     """A base model for displaying a GeoPortal admin map"""
@@ -16,17 +10,17 @@ class GeoPortalAdmin(GeoModelAdmin):
     # Public API #
     ##############
 
-    map_width = utils.DEFAULT_WIDTH  # Dimensions of the
-    map_height = utils.DEFAULT_HEIGHT # map (pixels)
+    map_width = utils.DEFAULT_WIDTH  #   Dimensions of the
+    map_height = utils.DEFAULT_HEIGHT  # map (pixels)
 
-    max_zoom = 20    # Zoom levels: 20 = finest
-    min_zoom = 0     #               0 = world
+    max_zoom = 20  # Zoom levels: 20 = finest
+    min_zoom = 0  #                0 = world
     point_zoom = utils.POINT_ZOOM  # Default zoom level for a single point
 
-    default_zoom = 5 # display a whole country
+    default_zoom = 5  # display a whole country
 
-    default_lon = 2  # Default location
-    default_lat = 47 # is France
+    default_lon = 2  #  Default location
+    default_lat = 47  # is France
 
     # Show map info or not
     map_info = False
@@ -47,7 +41,10 @@ class GeoPortalAdmin(GeoModelAdmin):
     ###############
     map_template = 'gis/admin/geoportal.html'
     wms_url = utils.WMS_URL
-    openlayers_url = utils.MEDIA_URL + 'GeoportalExtended.js'
+    @property
+    def openlayers_url(self):
+        base_url = getattr(settings, 'GEOPORTAL_MEDIA_URL', utils.MEDIA_URL)
+        return base_url + 'GeoportalExtended.js'
 
     # Mouse position: already displayed by Geoportail
     mouse_position = False
