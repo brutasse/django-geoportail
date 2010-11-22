@@ -54,12 +54,12 @@
 		{% for layer in layers %}
 		{{ map_var }}.viewer.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1, transitionEffect: 'resize'});
 		{% endfor %}
-		var styleMap = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
-				fillColor: "#{{ options.color }}",
-				fillOpacity: {{ options.opacity }},
-				{% if is_linestring %}strokeWidth: 3,{% endif %}
-				strokeColor: '#{{ options.color }}'},
-			OpenLayers.Feature.Vector.style["default"]))
+		var styleMap = new OpenLayers.StyleMap({'default': OpenLayers.Util.applyDefaults({
+				'fillColor': "#{{ options.color }}",
+				'fillOpacity': {{ options.opacity }},
+				{% if is_linestring %}'strokeWidth': 3,{% endif %}
+				'strokeColor': '#{{ options.color }}'},
+			OpenLayers.Feature.Vector.style["default"])});
 		{{ map_var }}.layers.vector = new OpenLayers.Layer.Vector(
 				"{{ field_name }}",
 				{styleMap: styleMap{% if not options.visible %}, visibility: false{% endif %} });

@@ -127,11 +127,13 @@ Hacked by Bruno Renié to make it work with the Géoportail API.
     {% for layer in layers %}
     viewer_{{ id }}.addGeoportalLayer('{{ layer.name }}', {opacity: {{ layer.opacity }}, name: '{{ layer.switcher_name }}', buffer: 1, transitionEffect: 'resize'});
     {% endfor %}{{ module }}.map = viewer_{{ id }}.map;
-    {% if is_linestring %}OpenLayers.Feature.Vector.style["default"]["strokeWidth"] = 3; // Default too thin for linestrings. {% endif %}
-    OpenLayers.Feature.Vector.style["default"]["fillOpacity"] = {{ feature_opacity|escapejs }};
-    OpenLayers.Feature.Vector.style["default"]["strokeColor"] = "#{{ feature_color }}";
-    OpenLayers.Feature.Vector.style["default"]["fillColor"] = "#{{ feature_color }}";
-    {{ module }}.layers.vector = new OpenLayers.Layer.Vector(" {{ field_name }}");
+    var styleMap = new OpenLayers.StyleMap({'default': OpenLayers.Util.applyDefaults({
+      'fillColor': "#{{ feature_color }}",
+      'fillOpacity': {{ feature_opacity|escapejs }},
+      {% if is_linestring %}'strokeWidth': 3,{% endif %}
+      'strokeColor': '#{{ feature_color }}'},
+    OpenLayers.Feature.Vector.style["default"])});
+    {{ module }}.layers.vector = new OpenLayers.Layer.Vector(" {{ field_name }}", {styleMap: styleMap});
     {{ module }}.map.addLayer({{ module }}.layers.vector);
     // Read WKT from the text field.
     var wkt = document.getElementById('{{ id }}').value;
