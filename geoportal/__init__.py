@@ -1,6 +1,6 @@
 from geoportal import utils, admin, templatetags, forms
 
-VERSION = (0, 4, 4)
+VERSION = (0, 4, 5)
 
 get_version = lambda: '.'.join(map(str, VERSION))
 

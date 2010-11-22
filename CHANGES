@@ -1,3 +1,8 @@
+2010-11-22 Bruno Renié <bruno@renie.fr> -- 0.4.5
+
+    * Fixed an issue with styleMap having effects on other maps when there are
+      several widgets on the same page.
+
 2010-08-24 Bruno Renié <bruno@renie.fr> -- 0.4.4
 
     * Update to Geoportail 1.1

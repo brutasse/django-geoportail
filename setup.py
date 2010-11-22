@@ -2,9 +2,10 @@
 from distutils.core import setup
 from setuptools import find_packages
 
+
 setup(
     name='django-geoportail',
-    version='0.4.4',
+    version='0.4.5',
     author=u'Bruno Renie',
     author_email='bruno@renie.fr',
     packages=find_packages(),
